@@ -470,7 +470,6 @@ function Experience({ active }: { active: string | null }) {
                             ? "resume-hit border-l-2 border-primary pl-4"
                             : "resume-dim pl-4"
                           : "pl-4",
-                        "relative before:absolute before:-left-0 before:content-['']",
                       ].join(" ")}
                     >
                       {highlight(bullet, active)}

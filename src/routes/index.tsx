@@ -77,9 +77,27 @@ function Home() {
   const [hovered, setHovered] = useState<string | null>(null);
   const active = hovered ?? locked;
 
-  const toggle = useCallback((skill: string) => {
-    setLocked((cur) => (cur === skill ? null : skill));
+  const scrollToFirstHit = useCallback((skill: string) => {
+    requestAnimationFrame(() => {
+      const main = document.querySelector("main");
+      if (!main) return;
+      const firstMark = main.querySelector(".skill-mark");
+      if (firstMark) {
+        firstMark.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
   }, []);
+
+  const toggle = useCallback(
+    (skill: string) => {
+      setLocked((cur) => {
+        const next = cur === skill ? null : skill;
+        if (next) scrollToFirstHit(next);
+        return next;
+      });
+    },
+    [scrollToFirstHit],
+  );
 
   const print = () => window.print();
   const catSlug = slugForSkill(active);

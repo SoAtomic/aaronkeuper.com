@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { skillAliases } from "@/data/resume";
+import { skillAliases, skillGroups } from "@/data/resume";
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -45,4 +45,27 @@ export function highlight(text: string, skill: string | null): ReactNode {
       <span key={i}>{part}</span>
     ),
   );
+}
+
+const CATEGORY_SLUGS: Record<string, string> = {
+  "Microsoft 365 & Identity": "identity",
+  "Endpoint & Device Management": "endpoint",
+  "Infrastructure & Monitoring": "infrastructure",
+  "Security & IT Operations": "security",
+  "Business Systems & Delivery": "business",
+};
+
+export function categorySlug(groupTitle: string): string {
+  return CATEGORY_SLUGS[groupTitle] ?? "identity";
+}
+
+const skillToSlug = new Map<string, string>();
+for (const group of skillGroups) {
+  for (const s of group.skills) {
+    if (!skillToSlug.has(s)) skillToSlug.set(s, categorySlug(group.title));
+  }
+}
+
+export function slugForSkill(skill: string | null): string | null {
+  return skill ? (skillToSlug.get(skill) ?? null) : null;
 }

@@ -8,7 +8,7 @@ import {
   skillGroups,
   summary,
 } from "@/data/resume";
-import { highlight, matchesSkill } from "@/lib/skill-match";
+import { categorySlug, highlight, matchesSkill, slugForSkill } from "@/lib/skill-match";
 
 const TITLE = "Aaron Keuper — Senior Systems Administrator";
 const DESCRIPTION =
@@ -133,6 +133,7 @@ function Home() {
   }, []);
 
   const print = () => window.print();
+  const catSlug = slugForSkill(active);
 
   return (
     <>
@@ -153,18 +154,25 @@ function Home() {
         Skip to résumé
       </a>
 
-      <div className="mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10">
+      <div
+        className={`mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10 ${
+          catSlug ? `cat-${catSlug}` : ""
+        }`}
+      >
         <div className="lg:flex lg:gap-16">
           {/* Left column */}
-          <aside className="print-single pt-12 lg:sticky lg:top-0 lg:h-screen lg:w-[30%] lg:shrink-0 lg:overflow-y-auto lg:pb-12">
-            <Identity onPrint={print} />
-            <SkillBrowser
-              active={active}
-              locked={locked}
-              onHover={setHovered}
-              onToggle={toggle}
-            />
+          <aside className="print-single pt-8 lg:sticky lg:top-0 lg:h-screen lg:w-[30%] lg:shrink-0 lg:overflow-y-auto lg:py-8">
+            <div className="rounded-2xl bg-cream p-6 sm:p-7 print:bg-transparent print:p-0">
+              <Identity onPrint={print} />
+              <SkillBrowser
+                active={active}
+                locked={locked}
+                onHover={setHovered}
+                onToggle={toggle}
+              />
+            </div>
           </aside>
+
 
           {/* Right column */}
           <main
@@ -196,7 +204,7 @@ function Identity({ onPrint }: { onPrint: () => void }) {
   return (
     <section id="profile-card" className="print-block">
       <div
-        className="flex h-[160px] w-[160px] items-center justify-center rounded-full border border-border bg-secondary text-[3.25rem] font-extrabold tracking-tight text-primary"
+        className="flex h-[160px] w-[160px] items-center justify-center rounded-full border border-border bg-cream text-[3.25rem] font-extrabold tracking-tight text-primary"
         role="img"
         aria-label="Portrait placeholder for Aaron Keuper"
       >
@@ -270,7 +278,7 @@ function SkillBrowser({
       </p>
 
       {skillGroups.map((group) => (
-        <div key={group.title} className="mt-7">
+        <div key={group.title} className={`mt-7 cat-${categorySlug(group.title)}`}>
           <h3 className="text-[0.95rem] font-bold">{group.title}</h3>
           <ul className="mt-3 flex flex-wrap gap-1.5">
             {group.skills.map((skill) => {
@@ -286,14 +294,10 @@ function SkillBrowser({
                     onFocus={() => onHover(skill)}
                     onBlur={() => onHover(null)}
                     onClick={() => onToggle(skill)}
-                    className={[
-                      "rounded-full border px-2.5 py-1 text-[0.85rem] leading-snug transition-colors duration-150",
-                      isLocked
-                        ? "border-primary bg-primary text-primary-foreground font-semibold"
-                        : isActive
-                          ? "border-primary bg-accent text-accent-foreground"
-                          : "border-border bg-secondary text-muted-foreground hover:border-primary hover:text-foreground",
-                    ].join(" ")}
+                    data-state={
+                      isLocked ? "locked" : isActive ? "active" : undefined
+                    }
+                    className="pill px-2.5 py-1 text-[0.85rem] leading-snug"
                   >
                     {skill}
                   </button>
@@ -362,7 +366,7 @@ function Profile({ active }: { active: string | null }) {
       <p
         className={[
           "text-[1.1875rem] leading-[1.65] transition-opacity duration-200",
-          active ? (hit ? "resume-hit border-l-2 border-primary pl-5" : "resume-dim") : "",
+          active ? (hit ? "resume-hit accent-rule pl-5" : "resume-dim") : "",
         ].join(" ")}
       >
         {highlight(summary, active)}
@@ -386,7 +390,7 @@ function Impact({ active }: { active: string | null }) {
                 "print-block max-w-[38ch] transition-opacity duration-200",
                 active
                   ? hit
-                    ? "resume-hit border-l-2 border-primary pl-5"
+                    ? "resume-hit accent-rule pl-5"
                     : "resume-dim"
                   : "",
               ].join(" ")}
@@ -432,7 +436,7 @@ function Experience({ active }: { active: string | null }) {
               {jobHit && active ? (
                 <span
                   aria-hidden="true"
-                  className="absolute -left-6 top-1 h-full w-[2px] bg-primary sm:-left-8"
+                  className="accent-bar absolute -left-6 top-1 h-full w-[2px] sm:-left-8"
                 />
               ) : null}
               <header className="print-keep max-w-[62ch]">
@@ -467,7 +471,7 @@ function Experience({ active }: { active: string | null }) {
                         "max-w-[68ch] text-[1.0625rem] leading-[1.65] transition-opacity duration-200",
                         active
                           ? hit
-                            ? "resume-hit border-l-2 border-primary pl-4"
+                            ? "resume-hit accent-rule pl-4"
                             : "resume-dim pl-4"
                           : "pl-4",
                       ].join(" ")}

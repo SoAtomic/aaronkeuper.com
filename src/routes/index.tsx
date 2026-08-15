@@ -161,15 +161,18 @@ function Home() {
       >
         <div className="lg:flex lg:gap-16">
           {/* Left column */}
-          <aside className="print-single relative pt-12 lg:sticky lg:top-0 lg:h-screen lg:w-[30%] lg:shrink-0 lg:overflow-y-auto lg:pb-12 before:absolute before:inset-y-0 before:-left-6 before:-right-6 before:-z-10 before:bg-cream before:content-[''] lg:before:-left-10 lg:before:right-[-2rem] no-print-bg">
-            <Identity onPrint={print} />
-            <SkillBrowser
-              active={active}
-              locked={locked}
-              onHover={setHovered}
-              onToggle={toggle}
-            />
+          <aside className="print-single pt-8 lg:sticky lg:top-0 lg:h-screen lg:w-[30%] lg:shrink-0 lg:overflow-y-auto lg:py-8">
+            <div className="rounded-2xl bg-cream p-6 sm:p-7 print:bg-transparent print:p-0">
+              <Identity onPrint={print} />
+              <SkillBrowser
+                active={active}
+                locked={locked}
+                onHover={setHovered}
+                onToggle={toggle}
+              />
+            </div>
           </aside>
+
 
           {/* Right column */}
           <main

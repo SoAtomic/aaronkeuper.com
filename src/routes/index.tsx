@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   education,
   impact,
@@ -8,7 +8,12 @@ import {
   skillGroups,
   summary,
 } from "@/data/resume";
-import { categorySlug, highlight, matchesSkill, slugForSkill } from "@/lib/skill-match";
+import {
+  categorySlug,
+  highlight,
+  matchesSkill,
+  slugForSkill,
+} from "@/lib/skill-match";
 
 const TITLE = "Aaron Keuper — Senior Systems Administrator";
 const DESCRIPTION =
@@ -63,67 +68,11 @@ const NAV = [
   { id: "skills", label: "Skills" },
 ];
 
-function useReadingProgress() {
-  const [progress, setProgress] = useState(0);
-  useEffect(() => {
-    const onScroll = () => {
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      setProgress(max > 0 ? Math.min(1, h.scrollTop / max) : 0);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-  return progress;
-}
-
-function Reveal({
-  children,
-  className = "",
-  as: Tag = "div",
-  ...rest
-}: {
-  children: React.ReactNode;
-  className?: string;
-  as?: React.ElementType;
-  [key: string]: unknown;
-}) {
-  const ref = useRef<HTMLElement | null>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setVisible(true);
-          io.disconnect();
-        }
-
-      },
-      { rootMargin: "-40px 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return (
-    <Tag
-      ref={ref}
-      className={`reveal ${visible ? "is-visible" : ""} ${className}`}
-      {...rest}
-    >
-      {children}
-    </Tag>
-  );
-}
+/* Shared type scale */
+const PROSE = "max-w-[46ch] sm:max-w-[64ch] text-[1.0625rem] sm:text-[1.1875rem] leading-[1.6]";
+const SECTION_H = "text-[2rem] sm:text-[2.35rem] font-extrabold leading-[1.12]";
 
 function Home() {
-  const progress = useReadingProgress();
   const [locked, setLocked] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const active = hovered ?? locked;
@@ -136,56 +85,41 @@ function Home() {
   const catSlug = slugForSkill(active);
 
   return (
-    <>
-      <div
-        className="no-print fixed inset-x-0 top-0 z-50 h-[3px] bg-transparent"
-        aria-hidden="true"
-      >
-        <div
-          className="h-full origin-left bg-primary transition-[width] duration-100 ease-out"
-          style={{ width: `${progress * 100}%` }}
-        />
-      </div>
-
+    <div className={catSlug ? `cat-${catSlug}` : undefined}>
       <a
         href="#resume"
-        className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
+        className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
       >
         Skip to résumé
       </a>
 
-      <div
-        className={`mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10 ${
-          catSlug ? `cat-${catSlug}` : ""
-        }`}
-      >
-        <div className="lg:flex lg:gap-16">
-          {/* Left column */}
-          <aside className="print-single pt-8 lg:sticky lg:top-0 lg:h-screen lg:w-[30%] lg:shrink-0 lg:overflow-y-auto lg:py-8">
-            <div className="rounded-2xl bg-cream p-6 sm:p-7 print:bg-transparent print:p-0">
-              <Identity onPrint={print} />
-              <SkillBrowser
-                active={active}
-                locked={locked}
-                onHover={setHovered}
-                onToggle={toggle}
-              />
+      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10">
+        <div className="lg:flex lg:gap-20">
+          <aside className="print-single pt-14 lg:sticky lg:top-0 lg:h-screen lg:w-[290px] lg:shrink-0 lg:overflow-y-auto lg:py-16">
+            <Identity onPrint={print} />
+            <div className="mt-16 lg:hidden">
+              <ProfileProse active={active} />
             </div>
+            <SkillBrowser
+              active={active}
+              locked={locked}
+              onHover={setHovered}
+              onToggle={toggle}
+            />
           </aside>
 
-
-          {/* Right column */}
           <main
             id="resume"
-            className="print-single min-w-0 flex-1 pb-28 pt-10 lg:pt-20"
+            className="print-single min-w-0 flex-1 pb-32 pt-16 lg:pt-16"
           >
             <Nav />
-            <Masthead />
-            <Profile active={active} />
+            <div className="hidden lg:block">
+              <Profile active={active} />
+            </div>
             <Impact active={active} />
             <Experience active={active} />
             <Education />
-            <footer className="mt-20 border-t pt-6 text-[0.95rem] text-muted-foreground">
+            <footer className="mt-28 border-t border-border pt-8 text-[0.95rem] text-muted-foreground">
               <p>
                 Aaron Keuper · Santa Cruz, California · Remote U.S. ·{" "}
                 <a className="prose-link" href="mailto:aaron@aaronkeuper.com">
@@ -196,32 +130,32 @@ function Home() {
           </main>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
 function Identity({ onPrint }: { onPrint: () => void }) {
   return (
-    <section id="profile-card" className="print-block">
+    <section className="print-block">
       <div
-        className="flex h-[160px] w-[160px] items-center justify-center rounded-full border border-border bg-cream text-[3.25rem] font-extrabold tracking-tight text-primary"
+        className="flex h-[128px] w-[128px] items-center justify-center rounded-full bg-paper text-[2.5rem] font-extrabold tracking-tight text-foreground"
         role="img"
         aria-label="Portrait placeholder for Aaron Keuper"
       >
         AK
       </div>
-      <h1 className="mt-7 text-[2rem] font-extrabold leading-[1.1] tracking-tight">
+      <h1 className="mt-8 text-[2.15rem] font-extrabold leading-[1.05]">
         Aaron Keuper
       </h1>
-      <p className="mt-2 text-lg font-semibold text-primary">
+      <p className="eyebrow mt-4 text-muted-foreground">
         Senior Systems Administrator
       </p>
-      <p className="mt-3 text-[1.0625rem] leading-relaxed text-muted-foreground">
+      <p className="mt-5 text-[1rem] leading-[1.6] text-muted-foreground">
         Santa Cruz, California
         <br />
         Remote U.S.
       </p>
-      <ul className="mt-5 space-y-2 text-[1.0625rem]">
+      <ul className="mt-5 space-y-2 text-[1rem]">
         <li>
           <a className="prose-link" href="mailto:aaron@aaronkeuper.com">
             aaron@aaronkeuper.com
@@ -238,7 +172,7 @@ function Identity({ onPrint }: { onPrint: () => void }) {
           </button>
         </li>
       </ul>
-      <p className="mt-5 border-l-2 border-primary pl-4 text-[1rem] leading-relaxed text-muted-foreground">
+      <p className="mt-6 text-[1rem] leading-[1.6] text-muted-foreground">
         Open to remote U.S. Senior Systems Administration opportunities.
       </p>
     </section>
@@ -257,11 +191,9 @@ function SkillBrowser({
   onToggle: (s: string) => void;
 }) {
   return (
-    <section id="skills" className="mt-12 print-block">
-      <div className="flex items-baseline justify-between gap-4 border-t pt-6">
-        <h2 className="text-[0.8rem] font-bold uppercase tracking-[0.14em] text-primary">
-          Technical Skills
-        </h2>
+    <section id="skills" className="print-block mt-16 scroll-mt-12">
+      <div className="flex items-baseline justify-between gap-4">
+        <h2 className="eyebrow text-muted-foreground">Technical Skills</h2>
         {locked ? (
           <button
             type="button"
@@ -272,13 +204,16 @@ function SkillBrowser({
           </button>
         ) : null}
       </div>
-      <p className="no-print mt-3 text-[0.95rem] leading-relaxed text-muted-foreground">
-        Hover, focus, or tap a skill to highlight where it shows up in the
-        résumé. Nothing is ever hidden.
+      <p className="no-print mt-3 text-[0.95rem] leading-[1.55] text-muted-foreground">
+        Hover, focus, or tap a skill to mark where it appears in the résumé.
+        Nothing is hidden.
       </p>
 
       {skillGroups.map((group) => (
-        <div key={group.title} className={`mt-7 cat-${categorySlug(group.title)}`}>
+        <div
+          key={group.title}
+          className={`mt-8 cat-${categorySlug(group.title)}`}
+        >
           <h3 className="text-[0.95rem] font-bold">{group.title}</h3>
           <ul className="mt-3 flex flex-wrap gap-1.5">
             {group.skills.map((skill) => {
@@ -297,7 +232,7 @@ function SkillBrowser({
                     data-state={
                       isLocked ? "locked" : isActive ? "active" : undefined
                     }
-                    className="pill px-2.5 py-1 text-[0.85rem] leading-snug"
+                    className="pill px-2.5 py-[3px] text-[0.85rem] leading-[1.45]"
                   >
                     {skill}
                   </button>
@@ -315,13 +250,13 @@ function Nav() {
   return (
     <nav
       aria-label="Sections"
-      className="no-print mb-14 flex flex-wrap gap-x-6 gap-y-2 border-b pb-4 text-[0.9rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground"
+      className="no-print mb-20 flex flex-wrap gap-x-7 gap-y-2 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-muted-foreground"
     >
       {NAV.map((item) => (
         <a
           key={item.id}
           href={`#${item.id}`}
-          className="transition-colors hover:text-primary"
+          className="transition-colors hover:text-foreground"
         >
           {item.label}
         </a>
@@ -330,82 +265,57 @@ function Nav() {
   );
 }
 
-function Masthead() {
+function ProfileProse({ active }: { active: string | null }) {
+  const hit = matchesSkill(summary, active);
   return (
-    <header className="print-block">
-      <h2 className="hidden text-3xl font-extrabold print:block">
-        Aaron Keuper
+    <>
+      <h2 id="profile" className={`${SECTION_H} scroll-mt-12`}>
+        Profile
       </h2>
-      <p className="text-[0.8rem] font-bold uppercase tracking-[0.16em] text-primary">
-        Senior Systems Administrator
+      <p
+        className={`mt-7 ${PROSE} ${active ? (hit ? "resume-hit" : "resume-dim") : ""}`}
+      >
+        {highlight(summary, active)}
       </p>
-      <p className="mt-3 text-[1.05rem] leading-relaxed text-muted-foreground">
-        Microsoft 365 · Entra ID · Intune · Active Directory · Endpoint &
-        Infrastructure Operations
-      </p>
-    </header>
-  );
-}
-
-function SectionHeading({ children, id }: { children: string; id?: string }) {
-  return (
-    <h2
-      id={id}
-      className="mb-8 scroll-mt-10 border-t pt-6 text-[2rem] font-extrabold leading-tight tracking-tight"
-    >
-      {children}
-    </h2>
+    </>
   );
 }
 
 function Profile({ active }: { active: string | null }) {
-  const hit = matchesSkill(summary, active);
   return (
-    <section className="mt-14 max-w-[68ch]">
-      <SectionHeading id="profile">Profile</SectionHeading>
-      <p
-        className={[
-          "text-[1.1875rem] leading-[1.65] transition-opacity duration-200",
-          active ? (hit ? "resume-hit accent-rule pl-5" : "resume-dim") : "",
-        ].join(" ")}
-      >
-        {highlight(summary, active)}
-      </p>
+    <section className="print-block">
+      <ProfileProse active={active} />
     </section>
   );
 }
 
 function Impact({ active }: { active: string | null }) {
   return (
-    <section className="mt-20">
-      <SectionHeading id="impact">Selected Impact</SectionHeading>
-      <div className="grid gap-x-12 gap-y-10 sm:grid-cols-2">
+    <section className="mt-28">
+      <h2 id="impact" className={`${SECTION_H} scroll-mt-12`}>
+        Selected Impact
+      </h2>
+      <div className="mt-10 grid gap-x-16 gap-y-12 sm:grid-cols-2">
         {impact.map((item) => {
           const hit = matchesSkill(item.text, active);
           return (
-            <Reveal
+            <article
               key={item.figure}
-              as="article"
-              className={[
-                "print-block max-w-[38ch] transition-opacity duration-200",
-                active
-                  ? hit
-                    ? "resume-hit accent-rule pl-5"
-                    : "resume-dim"
-                  : "",
-              ].join(" ")}
+              className={`print-block max-w-[38ch] ${
+                active ? (hit ? "resume-hit" : "resume-dim") : ""
+              }`}
             >
-              <p className="text-[2.75rem] font-extrabold leading-none tracking-tight">
+              <p className="text-[3rem] font-extrabold leading-none tracking-[-0.03em]">
                 {item.figure}
               </p>
-              <p className="mt-3 text-[1.0625rem] leading-[1.6] text-muted-foreground">
+              <p className="mt-4 text-[1.0625rem] leading-[1.6]">
                 {highlight(item.text, active)}
               </p>
-            </Reveal>
+            </article>
           );
         })}
       </div>
-      <p className="mt-10 max-w-[62ch] text-[1.0625rem] leading-[1.65] text-muted-foreground">
+      <p className="mt-14 max-w-[62ch] text-[1.0625rem] leading-[1.6] text-muted-foreground">
         Production environments have ranged from approximately 75 staff plus 400
         conference guests through a 2,000-user regulated healthcare campus.
       </p>
@@ -415,9 +325,11 @@ function Impact({ active }: { active: string | null }) {
 
 function Experience({ active }: { active: string | null }) {
   return (
-    <section className="mt-20">
-      <SectionHeading id="experience">Professional Experience</SectionHeading>
-      <div className="border-l border-border pl-6 sm:pl-8">
+    <section className="mt-28">
+      <h2 id="experience" className={`${SECTION_H} scroll-mt-12`}>
+        Professional Experience
+      </h2>
+      <div className="mt-12 space-y-20">
         {jobs.map((job) => {
           const jobHit =
             matchesSkill(job.title, active) ||
@@ -425,25 +337,18 @@ function Experience({ active }: { active: string | null }) {
             matchesSkill(job.environment ?? "", active) ||
             job.bullets.some((b) => matchesSkill(b, active));
           return (
-            <Reveal
+            <article
               key={job.org + job.dates}
-              as="article"
-              className={[
-                "print-block relative mt-14 first:mt-0 transition-opacity duration-200",
-                active ? (jobHit ? "resume-hit" : "resume-dim") : "",
-              ].join(" ")}
+              className={`print-block ${
+                active ? (jobHit ? "resume-hit" : "resume-dim") : ""
+              }`}
             >
-              {jobHit && active ? (
-                <span
-                  aria-hidden="true"
-                  className="accent-bar absolute -left-6 top-1 h-full w-[2px] sm:-left-8"
-                />
-              ) : null}
               <header className="print-keep max-w-[62ch]">
-                <h3 className="text-[1.5rem] font-extrabold leading-snug tracking-tight">
+                <p className="eyebrow text-muted-foreground">{job.dates}</p>
+                <h3 className="mt-3 text-[1.55rem] sm:text-[1.7rem] font-extrabold leading-[1.15]">
                   {job.title}
                 </h3>
-                <p className="mt-1.5 text-[1.05rem] font-semibold">
+                <p className="mt-2 text-[1.0625rem] font-semibold">
                   {job.org}
                   {job.location ? (
                     <span className="font-normal text-muted-foreground">
@@ -452,36 +357,29 @@ function Experience({ active }: { active: string | null }) {
                     </span>
                   ) : null}
                 </p>
-                <p className="mt-1 text-[0.95rem] uppercase tracking-[0.08em] text-muted-foreground">
-                  {job.dates}
-                </p>
                 {job.environment ? (
-                  <p className="mt-4 text-[1.0625rem] leading-[1.6] text-muted-foreground">
+                  <p className="mt-5 text-[1.0625rem] leading-[1.6] text-muted-foreground">
                     {highlight(job.environment, active)}
                   </p>
                 ) : null}
               </header>
-              <ul className="mt-6 space-y-5">
-                {job.bullets.map((bullet, i) => {
-                  const hit = matchesSkill(bullet, active);
-                  return (
-                    <li
-                      key={i}
-                      className={[
-                        "max-w-[68ch] text-[1.0625rem] leading-[1.65] transition-opacity duration-200",
-                        active
-                          ? hit
-                            ? "resume-hit accent-rule pl-4"
-                            : "resume-dim pl-4"
-                          : "pl-4",
-                      ].join(" ")}
+              <ul className="mt-7 space-y-4">
+                {job.bullets.map((bullet, i) => (
+                  <li
+                    key={i}
+                    className="relative max-w-[46ch] pl-6 text-[1.0625rem] leading-[1.6] sm:max-w-[68ch] sm:text-[1.125rem]"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-0 top-0 text-muted-foreground"
                     >
-                      {highlight(bullet, active)}
-                    </li>
-                  );
-                })}
+                      —
+                    </span>
+                    {highlight(bullet, active)}
+                  </li>
+                ))}
               </ul>
-            </Reveal>
+            </article>
           );
         })}
       </div>
@@ -491,15 +389,15 @@ function Experience({ active }: { active: string | null }) {
 
 function Education() {
   return (
-    <section className="mt-20">
-      <SectionHeading id="education">
-        Education & Professional Development
-      </SectionHeading>
-      <div className="space-y-8">
+    <section className="mt-28">
+      <h2 id="education" className={`${SECTION_H} scroll-mt-12`}>
+        Education &amp; Professional Development
+      </h2>
+      <div className="mt-10 space-y-10">
         {education.map((e) => (
           <article key={e.school} className="print-block max-w-[62ch]">
-            <h3 className="text-[1.25rem] font-bold">{e.school}</h3>
-            <p className="mt-1 text-[1.0625rem]">{e.detail}</p>
+            <h3 className="text-[1.3rem] font-bold">{e.school}</h3>
+            <p className="mt-2 text-[1.0625rem]">{e.detail}</p>
             {e.note ? (
               <p className="mt-2 text-[1.0625rem] leading-[1.6] text-muted-foreground">
                 {e.note}
@@ -509,10 +407,13 @@ function Education() {
         ))}
       </div>
 
-      <h3 className="mt-14 text-[1.25rem] font-bold">Remote Work Setup</h3>
-      <ul className="mt-4 space-y-2 text-[1.0625rem] leading-[1.6] text-muted-foreground">
+      <h3 className="mt-16 text-[1.3rem] font-bold">Remote Work Setup</h3>
+      <ul className="mt-5 max-w-[62ch] space-y-2 text-[1.0625rem] leading-[1.6] text-muted-foreground">
         {remoteSetup.map((r) => (
-          <li key={r} className="border-l-2 border-border pl-4">
+          <li key={r} className="relative pl-6">
+            <span aria-hidden="true" className="absolute left-0 top-0">
+              —
+            </span>
             {r}
           </li>
         ))}

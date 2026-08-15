@@ -65,46 +65,87 @@
   --radius: 0.5rem;
   --font-sans:
     "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --background: oklch(0.976 0.011 71.5);
+  --cream: #fdf8f4;
+  --background: oklch(1 0 0);
   --foreground: oklch(0.324 0.014 236.6);
-  --card: oklch(0.988 0.008 71.5);
+  --card: oklch(1 0 0);
   --card-foreground: oklch(0.324 0.014 236.6);
-  --popover: oklch(0.988 0.008 71.5);
+  --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.324 0.014 236.6);
   --primary: oklch(0.541 0.126 158.4);
   --primary-foreground: oklch(0.99 0.006 71.5);
-  --secondary: oklch(0.942 0.014 71.5);
+  --secondary: var(--cream);
   --secondary-foreground: oklch(0.324 0.014 236.6);
-  --muted: oklch(0.942 0.014 71.5);
+  --muted: var(--cream);
   --muted-foreground: oklch(0.505 0.014 236.6);
-  --accent: oklch(0.93 0.02 158);
+  --accent: var(--cream);
   --accent-foreground: oklch(0.41 0.1 158.4);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.99 0.006 71.5);
-  --border: oklch(0.892 0.014 71.5);
-  --input: oklch(0.892 0.014 71.5);
+  --border: oklch(0.906 0.008 71.5);
+  --input: oklch(0.906 0.008 71.5);
   --ring: oklch(0.541 0.126 158.4);
-  --link: oklch(0.575 0.099 255.6);
+  --link: #447cb3;
   --marker: #ffe100;
   --chart-1: oklch(0.541 0.126 158.4);
   --chart-2: oklch(0.575 0.099 255.6);
   --chart-3: oklch(0.505 0.014 236.6);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.976 0.011 71.5);
+  --sidebar: var(--cream);
   --sidebar-foreground: oklch(0.324 0.014 236.6);
   --sidebar-primary: oklch(0.541 0.126 158.4);
   --sidebar-primary-foreground: oklch(0.99 0.006 71.5);
-  --sidebar-accent: oklch(0.942 0.014 71.5);
+  --sidebar-accent: var(--cream);
   --sidebar-accent-foreground: oklch(0.324 0.014 236.6);
-  --sidebar-border: oklch(0.892 0.014 71.5);
+  --sidebar-border: oklch(0.906 0.008 71.5);
   --sidebar-ring: oklch(0.541 0.126 158.4);
+
+  /* Neutral fallback for category-driven accents */
+  --cat-strong: var(--primary);
+  --cat-bg: var(--cream);
+  --cat-border: var(--border);
+  --cat-text: var(--foreground);
+}
+
+/* Muted, professional category families */
+.cat-identity {
+  --cat-bg: #eef4fa;
+  --cat-border: #c3d7ea;
+  --cat-text: #2f5c88;
+  --cat-strong: #447cb3;
+}
+.cat-endpoint {
+  --cat-bg: #ecf6f1;
+  --cat-border: #bcdcca;
+  --cat-text: #176440;
+  --cat-strong: #1c8750;
+}
+.cat-infrastructure {
+  --cat-bg: #fbf4e3;
+  --cat-border: #e6d5a8;
+  --cat-text: #7d5a12;
+  --cat-strong: #b98a1f;
+}
+.cat-security {
+  --cat-bg: #f1f3f4;
+  --cat-border: #ccd3d7;
+  --cat-text: #2f373d;
+  --cat-strong: #4a555d;
+}
+.cat-business {
+  --cat-bg: #edf5f4;
+  --cat-border: #c0dcd9;
+  --cat-text: #2c605c;
+  --cat-strong: #3f7f7a;
 }
 
 @theme inline {
   --color-link: var(--link);
+  --color-cream: var(--cream);
   --font-sans: var(--font-sans);
 }
+
 
 @layer base {
   * {

@@ -311,7 +311,10 @@ function Impact({ active }: { active: string | null }) {
     <>
       <hr className="mt-16 border-0 border-t border-border" />
       <section className="mt-28">
-        <h2 id="impact" className={`${SECTION_H} scroll-mt-12`}>
+        <h2 id="impact" className={`${SECTION_H} scroll-mt-12 relative group`}>
+          <a href="#impact" className="section-anchor" aria-label="Link to Selected Impact">
+            <span aria-hidden="true">#</span>
+          </a>
           Selected Impact
         </h2>
       <div className="mt-10 grid gap-x-16 gap-y-12 sm:grid-cols-2">
@@ -348,7 +351,10 @@ function Experience({ active }: { active: string | null }) {
     <>
       <hr className="mt-16 border-0 border-t border-border" />
       <section className="mt-28">
-        <h2 id="experience" className={`${SECTION_H} scroll-mt-12`}>
+        <h2 id="experience" className={`${SECTION_H} scroll-mt-12 relative group`}>
+          <a href="#experience" className="section-anchor" aria-label="Link to Professional Experience">
+            <span aria-hidden="true">#</span>
+          </a>
           Professional Experience
         </h2>
       <div className="mt-12 space-y-20">
@@ -415,7 +421,10 @@ function Education() {
     <>
       <hr className="mt-16 border-0 border-t border-border" />
       <section className="mt-28">
-        <h2 id="education" className={`${SECTION_H} scroll-mt-12`}>
+        <h2 id="education" className={`${SECTION_H} scroll-mt-12 relative group`}>
+          <a href="#education" className="section-anchor" aria-label="Link to Education &amp; Professional Development">
+            <span aria-hidden="true">#</span>
+          </a>
           Education &amp; Professional Development
         </h2>
       <div className="mt-10 space-y-10">

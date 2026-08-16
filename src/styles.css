@@ -219,6 +219,25 @@
     text-transform: uppercase;
   }
 
+  .section-anchor {
+    position: absolute;
+    left: -1.3em;
+    top: 0.08em;
+    color: var(--muted-foreground);
+    font-size: 0.85em;
+    font-weight: 500;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 120ms ease, color 120ms ease;
+  }
+  .group:hover .section-anchor,
+  .section-anchor:focus-visible {
+    opacity: 1;
+  }
+  .section-anchor:hover {
+    color: var(--ink);
+  }
+
   .pill {
     border-radius: 9999px;
     border: 1px solid transparent;
@@ -281,6 +300,9 @@
   }
   .resume-dim {
     opacity: 1 !important;
+  }
+  .section-anchor {
+    display: none !important;
   }
   .print-block {
     break-inside: avoid;

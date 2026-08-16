@@ -309,7 +309,7 @@ function Profile({ active }: { active: string | null }) {
 function Impact({ active }: { active: string | null }) {
   return (
     <>
-      <hr className="border-0 border-t border-border" />
+      <hr className="mt-16 border-0 border-t border-border" />
       <section className="mt-28">
         <h2 id="impact" className={`${SECTION_H} scroll-mt-12`}>
           Selected Impact
@@ -346,7 +346,7 @@ function Impact({ active }: { active: string | null }) {
 function Experience({ active }: { active: string | null }) {
   return (
     <>
-      <hr className="border-0 border-t border-border" />
+      <hr className="mt-16 border-0 border-t border-border" />
       <section className="mt-28">
         <h2 id="experience" className={`${SECTION_H} scroll-mt-12`}>
           Professional Experience
@@ -413,7 +413,7 @@ function Experience({ active }: { active: string | null }) {
 function Education() {
   return (
     <>
-      <hr className="border-0 border-t border-border" />
+      <hr className="mt-16 border-0 border-t border-border" />
       <section className="mt-28">
         <h2 id="education" className={`${SECTION_H} scroll-mt-12`}>
           Education &amp; Professional Development

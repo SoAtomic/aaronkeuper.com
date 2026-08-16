@@ -308,10 +308,12 @@ function Profile({ active }: { active: string | null }) {
 
 function Impact({ active }: { active: string | null }) {
   return (
-    <section className="mt-28">
-      <h2 id="impact" className={`${SECTION_H} scroll-mt-12`}>
-        Selected Impact
-      </h2>
+    <>
+      <hr className="border-0 border-t border-border" />
+      <section className="mt-28">
+        <h2 id="impact" className={`${SECTION_H} scroll-mt-12`}>
+          Selected Impact
+        </h2>
       <div className="mt-10 grid gap-x-16 gap-y-12 sm:grid-cols-2">
         {impact.map((item) => {
           const hit = matchesSkill(item.text, active);
@@ -342,10 +344,12 @@ function Impact({ active }: { active: string | null }) {
 
 function Experience({ active }: { active: string | null }) {
   return (
-    <section className="mt-28">
-      <h2 id="experience" className={`${SECTION_H} scroll-mt-12`}>
-        Professional Experience
-      </h2>
+    <>
+      <hr className="border-0 border-t border-border" />
+      <section className="mt-28">
+        <h2 id="experience" className={`${SECTION_H} scroll-mt-12`}>
+          Professional Experience
+        </h2>
       <div className="mt-12 space-y-20">
         {jobs.map((job) => {
           const jobHit =
@@ -406,10 +410,12 @@ function Experience({ active }: { active: string | null }) {
 
 function Education() {
   return (
-    <section className="mt-28">
-      <h2 id="education" className={`${SECTION_H} scroll-mt-12`}>
-        Education &amp; Professional Development
-      </h2>
+    <>
+      <hr className="border-0 border-t border-border" />
+      <section className="mt-28">
+        <h2 id="education" className={`${SECTION_H} scroll-mt-12`}>
+          Education &amp; Professional Development
+        </h2>
       <div className="mt-10 space-y-10">
         {education.map((e) => (
           <article key={e.school} className="print-block max-w-[62ch]">

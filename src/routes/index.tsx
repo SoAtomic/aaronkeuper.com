@@ -183,11 +183,6 @@ function Identity({ onPrint }: { onPrint: () => void }) {
             Download Résumé
           </button>
         </li>
-        <li className="no-print">
-          <button className="prose-link" type="button" onClick={onPrint}>
-            Print / Save as PDF
-          </button>
-        </li>
       </ul>
     </section>
   );

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
+import aaronPhotoAsset from "@/assets/aaron-keuper.jpg.asset.json";
 import {
   education,
   impact,

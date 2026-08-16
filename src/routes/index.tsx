@@ -339,6 +339,7 @@ function Impact({ active }: { active: string | null }) {
         conference guests through a 2,000-user regulated healthcare campus.
       </p>
     </section>
+    </>
   );
 }
 
@@ -405,6 +406,7 @@ function Experience({ active }: { active: string | null }) {
         })}
       </div>
     </section>
+    </>
   );
 }
 
@@ -442,5 +444,6 @@ function Education() {
         ))}
       </ul>
     </section>
+    </>
   );
 }

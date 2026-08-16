@@ -268,13 +268,13 @@ function Nav() {
   return (
     <nav
       aria-label="Sections"
-      className="no-print mb-20 flex flex-wrap gap-x-7 gap-y-2 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-muted-foreground"
+      className="no-print mb-20 flex flex-wrap gap-x-7 gap-y-2 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-[#000000]"
     >
       {NAV.map((item) => (
         <a
           key={item.id}
           href={`#${item.id}`}
-          className="transition-colors hover:text-foreground"
+          className="transition-colors hover:text-[#3c90ff]"
         >
           {item.label}
         </a>

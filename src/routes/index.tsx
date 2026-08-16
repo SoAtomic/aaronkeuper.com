@@ -130,8 +130,8 @@ function Home() {
             id="resume"
             className="print-single min-w-0 flex-1 pb-32"
           >
+            <Nav />
             <div className="hidden lg:block">
-              <Nav />
               <Profile active={active} />
             </div>
             <Impact active={active} />

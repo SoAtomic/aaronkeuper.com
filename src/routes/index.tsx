@@ -268,23 +268,25 @@ function Nav() {
   return (
     <nav
       aria-label="Sections"
-      className="no-print mb-20 flex flex-wrap items-center gap-x-4 gap-y-2 text-[14px] font-bold tracking-[0.04em] text-[#000000]"
+      className="no-print sticky top-0 z-10 -mx-6 mb-16 border-b border-border bg-background px-6 py-4 sm:-mx-10 sm:px-10"
     >
-      {NAV.map((item, index) => (
-        <span key={item.id} className="flex items-center gap-x-4">
-          <a
-            href={`#${item.id}`}
-            className="transition-colors hover:text-[#3c90ff]"
-          >
-            {item.label}
-          </a>
-          {index < NAV.length - 1 ? (
-            <span aria-hidden="true" className="text-muted-foreground">
-              /
-            </span>
-          ) : null}
-        </span>
-      ))}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[14px] font-bold tracking-[0.04em] text-[#000000]">
+        {NAV.map((item, index) => (
+          <span key={item.id} className="flex items-center gap-x-4">
+            <a
+              href={`#${item.id}`}
+              className="transition-colors hover:text-[#3c90ff]"
+            >
+              {item.label}
+            </a>
+            {index < NAV.length - 1 ? (
+              <span aria-hidden="true" className="text-muted-foreground">
+                /
+              </span>
+            ) : null}
+          </span>
+        ))}
+      </div>
     </nav>
   );
 }

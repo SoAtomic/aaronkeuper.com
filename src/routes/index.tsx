@@ -106,14 +106,15 @@ function Home() {
     <div className={catSlug ? `cat-${catSlug}` : undefined}>
       <a
         href="#resume"
-        className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
+        className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-24 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
       >
         Skip to résumé
       </a>
 
-      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10">
+      <Nav />
+      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10 pt-20">
         <div className="lg:flex lg:gap-20">
-          <aside className="print-single pt-14 lg:sticky lg:top-0 lg:h-screen lg:w-[290px] lg:shrink-0 lg:overflow-y-auto lg:py-16">
+          <aside className="print-single pt-14 lg:sticky lg:top-20 lg:h-[calc(100vh-5rem)] lg:w-[290px] lg:shrink-0 lg:overflow-y-auto lg:py-16">
             <Identity onPrint={print} />
             <div className="mt-16 lg:hidden">
               <ProfileProse active={active} />
@@ -128,9 +129,8 @@ function Home() {
 
           <main
             id="resume"
-            className="print-single min-w-0 flex-1 pb-32 pt-16 lg:pt-16"
+            className="print-single min-w-0 flex-1 pb-32"
           >
-            <Nav />
             <div className="hidden lg:block">
               <Profile active={active} />
             </div>
@@ -268,17 +268,19 @@ function Nav() {
   return (
     <nav
       aria-label="Sections"
-      className="no-print mb-20 flex flex-wrap gap-x-7 gap-y-2 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-muted-foreground"
+      className="no-print fixed left-0 right-0 top-0 z-50 border-b border-border bg-background"
     >
-      {NAV.map((item) => (
-        <a
-          key={item.id}
-          href={`#${item.id}`}
-          className="transition-colors hover:text-foreground"
-        >
-          {item.label}
-        </a>
-      ))}
+      <div className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-8 gap-y-2 px-6 py-4 sm:px-10 text-base font-bold uppercase tracking-[0.12em] text-muted-foreground">
+        {NAV.map((item) => (
+          <a
+            key={item.id}
+            href={`#${item.id}`}
+            className="transition-colors hover:text-foreground"
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
     </nav>
   );
 }

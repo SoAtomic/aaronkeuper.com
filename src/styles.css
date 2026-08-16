@@ -301,6 +301,9 @@
   .resume-dim {
     opacity: 1 !important;
   }
+  .section-anchor {
+    display: none !important;
+  }
   .print-block {
     break-inside: avoid;
     page-break-inside: avoid;

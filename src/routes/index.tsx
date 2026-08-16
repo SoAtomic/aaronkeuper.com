@@ -111,9 +111,10 @@ function Home() {
         Skip to résumé
       </a>
 
-      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10">
+      <Nav />
+      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10 pt-20">
         <div className="lg:flex lg:gap-20">
-          <aside className="print-single pt-14 lg:sticky lg:top-0 lg:h-screen lg:w-[290px] lg:shrink-0 lg:overflow-y-auto lg:py-16">
+          <aside className="print-single pt-14 lg:sticky lg:top-20 lg:h-[calc(100vh-5rem)] lg:w-[290px] lg:shrink-0 lg:overflow-y-auto lg:py-16">
             <Identity onPrint={print} />
             <div className="mt-16 lg:hidden">
               <ProfileProse active={active} />
@@ -128,9 +129,8 @@ function Home() {
 
           <main
             id="resume"
-            className="print-single min-w-0 flex-1 pb-32 pt-16 lg:pt-16"
+            className="print-single min-w-0 flex-1 pb-32"
           >
-            <Nav />
             <div className="hidden lg:block">
               <Profile active={active} />
             </div>

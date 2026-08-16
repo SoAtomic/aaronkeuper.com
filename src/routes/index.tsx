@@ -106,15 +106,14 @@ function Home() {
     <div className={catSlug ? `cat-${catSlug}` : undefined}>
       <a
         href="#resume"
-        className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-24 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
+        className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-6 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
       >
         Skip to résumé
       </a>
 
-      <Nav />
-      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10 pt-20">
+      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10 pt-14">
         <div className="lg:flex lg:gap-20">
-          <aside className="print-single pt-14 lg:sticky lg:top-20 lg:h-[calc(100vh-5rem)] lg:w-[290px] lg:shrink-0 lg:overflow-y-auto lg:py-16">
+          <aside className="print-single pt-14 lg:sticky lg:top-8 lg:h-[calc(100vh-2rem)] lg:w-[290px] lg:shrink-0 lg:overflow-y-auto lg:py-16">
             <Identity onPrint={print} />
             <div className="mt-16 lg:hidden">
               <ProfileProse active={active} />
@@ -132,6 +131,7 @@ function Home() {
             className="print-single min-w-0 flex-1 pb-32"
           >
             <div className="hidden lg:block">
+              <Nav />
               <Profile active={active} />
             </div>
             <Impact active={active} />

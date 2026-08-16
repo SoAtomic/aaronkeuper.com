@@ -41,7 +41,7 @@ export const Route = createFileRoute("/")({
           name: "Aaron Keuper",
           jobTitle: "Senior Systems Administrator",
           description: DESCRIPTION,
-          email: "mailto:aaron@aaronkeuper.com",
+          email: "mailto:keuper@duck.com",
           url: "https://aaronkeuper.com",
           address: {
             "@type": "PostalAddress",
@@ -140,9 +140,9 @@ function Home() {
             <Education />
             <footer className="mt-28 border-t border-border pt-8 text-[0.95rem] text-muted-foreground">
               <p>
-                Aaron Keuper · Santa Cruz, California · Remote U.S. ·{" "}
-                <a className="prose-link" href="mailto:aaron@aaronkeuper.com">
-                  aaron@aaronkeuper.com
+              Aaron Keuper · Santa Cruz, California · Remote U.S. ·{" "}
+                <a className="prose-link" href="mailto:keuper@duck.com">
+                  keuper@duck.com
                 </a>
               </p>
             </footer>
@@ -174,8 +174,8 @@ function Identity({ onPrint }: { onPrint: () => void }) {
       </p>
       <ul className="mt-5 space-y-2 text-[1rem]">
         <li>
-          <a className="prose-link" href="mailto:aaron@aaronkeuper.com">
-            aaron@aaronkeuper.com
+          <a className="prose-link" href="mailto:keuper@duck.com">
+            keuper@duck.com
           </a>
         </li>
         <li className="no-print">
@@ -189,9 +189,6 @@ function Identity({ onPrint }: { onPrint: () => void }) {
           </button>
         </li>
       </ul>
-      <p className="mt-6 text-[1rem] leading-[1.6] text-muted-foreground">
-        Open to remote U.S. Senior Systems Administration opportunities.
-      </p>
     </section>
   );
 }
@@ -208,7 +205,7 @@ function SkillBrowser({
   onToggle: (s: string) => void;
 }) {
   return (
-    <section id="skills" className="print-block mt-16 scroll-mt-12">
+    <section id="skills" className="print-block mt-8 scroll-mt-12">
       <div className="flex items-baseline justify-between gap-4">
         <h2 className="eyebrow text-muted-foreground">Technical Skills</h2>
         {locked ? (
@@ -398,7 +395,7 @@ function Experience({ active }: { active: string | null }) {
                       aria-hidden="true"
                       className="absolute left-0 top-0 text-muted-foreground"
                     >
-                      —
+                      •
                     </span>
                     {highlight(bullet, active)}
                   </li>
@@ -437,7 +434,7 @@ function Education() {
         {remoteSetup.map((r) => (
           <li key={r} className="relative pl-6">
             <span aria-hidden="true" className="absolute left-0 top-0">
-              —
+              •
             </span>
             {r}
           </li>

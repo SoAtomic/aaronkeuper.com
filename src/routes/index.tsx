@@ -361,7 +361,7 @@ function Experience({ active }: { active: string | null }) {
               }`}
             >
               <header className="print-keep max-w-[62ch]">
-                <p className="eyebrow text-[#3c90ff]">{job.dates}</p>
+                <p className="eyebrow text-[#bf616a]">{job.dates}</p>
                 <h3 className="mt-3 text-[1.55rem] sm:text-[1.7rem] font-extrabold leading-[1.15]">
                   {job.title}
                 </h3>
@@ -388,7 +388,7 @@ function Experience({ active }: { active: string | null }) {
                   >
                     <span
                       aria-hidden="true"
-                      className="absolute left-0 top-[-0.35rem] text-[2.125rem] leading-none text-[#3c90ff]"
+                      className="absolute left-0 top-[-0.35rem] text-[2.125rem] leading-none text-[#bf616a]"
                     >
                       •
                     </span>
@@ -428,7 +428,7 @@ function Education() {
       <ul className="mt-5 max-w-[62ch] space-y-2 text-[1.0625rem] leading-[1.6] text-muted-foreground">
         {remoteSetup.map((r) => (
           <li key={r} className="relative pl-6">
-            <span aria-hidden="true" className="absolute left-0 top-[-0.35rem] text-[2.125rem] leading-none text-[#3c90ff]">
+            <span aria-hidden="true" className="absolute left-0 top-[-0.35rem] text-[2.125rem] leading-none text-[#bf616a]">
               •
             </span>
             {r}

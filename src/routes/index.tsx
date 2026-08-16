@@ -268,17 +268,19 @@ function Nav() {
   return (
     <nav
       aria-label="Sections"
-      className="no-print mb-20 flex flex-wrap gap-x-7 gap-y-2 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-muted-foreground"
+      className="no-print fixed left-0 right-0 top-0 z-50 border-b border-border bg-background"
     >
-      {NAV.map((item) => (
-        <a
-          key={item.id}
-          href={`#${item.id}`}
-          className="transition-colors hover:text-foreground"
-        >
-          {item.label}
-        </a>
-      ))}
+      <div className="mx-auto flex max-w-[1180px] flex-wrap items-center gap-x-8 gap-y-2 px-6 py-4 sm:px-10 text-base font-bold uppercase tracking-[0.12em] text-muted-foreground">
+        {NAV.map((item) => (
+          <a
+            key={item.id}
+            href={`#${item.id}`}
+            className="transition-colors hover:text-foreground"
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
     </nav>
   );
 }

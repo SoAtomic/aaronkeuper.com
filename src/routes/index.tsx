@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
+import aaronPhotoAsset from "@/assets/aaron-keuper.jpg.asset.json";
 import {
   education,
   impact,
@@ -155,13 +156,11 @@ function Home() {
 function Identity({ onPrint }: { onPrint: () => void }) {
   return (
     <section className="print-block">
-      <div
-        className="flex h-[128px] w-[128px] items-center justify-center rounded-full bg-paper text-[2.5rem] font-extrabold tracking-tight text-foreground"
-        role="img"
-        aria-label="Portrait placeholder for Aaron Keuper"
-      >
-        AK
-      </div>
+      <img
+        src={aaronPhotoAsset.url}
+        alt="Aaron Keuper"
+        className="h-[128px] w-[128px] rounded-full object-cover"
+      />
       <h1 className="mt-8 text-[2.15rem] font-extrabold leading-[1.05]">
         Aaron Keuper
       </h1>

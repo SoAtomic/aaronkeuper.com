@@ -106,7 +106,7 @@ function Home() {
     <div className={catSlug ? `cat-${catSlug}` : undefined}>
       <a
         href="#resume"
-        className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
+        className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-24 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
       >
         Skip to résumé
       </a>

@@ -109,7 +109,7 @@ function Home() {
         href="#resume"
         className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-6 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
       >
-        Skip to résumé
+        Skip to content
       </a>
 
       <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10 pt-14">

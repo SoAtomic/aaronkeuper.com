@@ -309,7 +309,6 @@ function Profile({ active }: { active: string | null }) {
 function Impact({ active }: { active: string | null }) {
   return (
     <section className="mt-28">
-      <hr className="w-3/4 mb-10 border-border" />
       <h2 id="impact" className={`${SECTION_H} scroll-mt-12`}>
         Selected Impact
       </h2>
@@ -344,7 +343,6 @@ function Impact({ active }: { active: string | null }) {
 function Experience({ active }: { active: string | null }) {
   return (
     <section className="mt-28">
-      <hr className="w-3/4 mb-10 border-border" />
       <h2 id="experience" className={`${SECTION_H} scroll-mt-12`}>
         Professional Experience
       </h2>
@@ -409,7 +407,6 @@ function Experience({ active }: { active: string | null }) {
 function Education() {
   return (
     <section className="mt-28">
-      <hr className="w-3/4 mb-10 border-border" />
       <h2 id="education" className={`${SECTION_H} scroll-mt-12`}>
         Education &amp; Professional Development
       </h2>

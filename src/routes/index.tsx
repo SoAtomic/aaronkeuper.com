@@ -177,8 +177,8 @@ function Nav() {
       aria-label="Sections"
       className="no-print sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur"
     >
-      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-end px-5 py-4 sm:px-8 sm:py-[18px]">
-        <div className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 text-[0.98rem] font-medium text-foreground sm:gap-x-7">
+      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center px-3 py-4 sm:justify-end sm:px-8 sm:py-[18px]">
+        <div className="flex w-full max-w-[360px] flex-nowrap items-center justify-between gap-x-0 whitespace-nowrap text-[0.72rem] font-medium text-foreground min-[375px]:text-[0.76rem] min-[430px]:max-w-none min-[430px]:justify-center min-[430px]:gap-x-3 min-[430px]:text-[0.8rem] sm:w-auto sm:justify-end sm:gap-x-7 sm:text-[0.98rem]">
           {NAV.map((item) => (
             <a key={item.id} href={`#${item.id}`} className="nav-link">
               {item.label}

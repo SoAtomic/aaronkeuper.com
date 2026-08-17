@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { skillAliases, skillGroups } from "@/data/resume";
+import { skillAliases, skillGroups, skillHighlightAliases } from "@/data/resume";
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -8,8 +8,8 @@ export function termsForSkill(skill: string): string[] {
   return [...terms].filter(Boolean).sort((a, b) => b.length - a.length);
 }
 
-function buildRegex(skill: string): RegExp {
-  const terms = termsForSkill(skill).map(escapeRe);
+function buildRegex(skill: string, extraTerms: readonly string[] = []): RegExp {
+  const terms = [...termsForSkill(skill), ...extraTerms].map(escapeRe);
   return new RegExp(`(${terms.join("|")})`, "gi");
 }
 
@@ -24,23 +24,40 @@ function regexFor(skill: string): RegExp {
   return re;
 }
 
-export function matchesSkill(text: string, skill: string | null): boolean {
+export function matchesSkill(
+  text: string,
+  skill: string | null,
+  associatedSkills?: readonly string[],
+): boolean {
   if (!skill) return false;
+  if (associatedSkills?.includes(skill)) return true;
   const re = regexFor(skill);
   return re.test(text);
 }
 
 /** Renders text with the active skill's matching phrases marked. */
-export function highlight(text: string, skill: string | null): ReactNode {
+export function highlight(
+  text: string,
+  skill: string | null,
+  associatedSkills?: readonly string[],
+  onMarkClick?: (skill: string) => void,
+): ReactNode {
   if (!skill) return text;
-  const re = regexFor(skill);
+  const extraTerms = associatedSkills?.includes(skill) ? (skillHighlightAliases[skill] ?? []) : [];
+  const re = extraTerms.length ? buildRegex(skill, extraTerms) : regexFor(skill);
   const parts = text.split(re);
   if (parts.length === 1) return text;
   return parts.map((part, i) =>
     i % 2 === 1 ? (
-      <mark key={i} className="skill-mark">
+      <button
+        key={i}
+        type="button"
+        className="skill-mark"
+        data-skill-mark={skill}
+        onClick={() => onMarkClick?.(skill)}
+      >
         {part}
-      </mark>
+      </button>
     ) : (
       <span key={i}>{part}</span>
     ),

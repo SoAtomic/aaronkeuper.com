@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
-import aaronPhotoAsset from "@/assets/aaron-keuper.jpg.asset.json";
+import aaronPhoto from "@/assets/aaron-keuper.jpeg";
 import {
   education,
   impact,
@@ -8,13 +8,9 @@ import {
   remoteSetup,
   skillGroups,
   summary,
+  type SkillTaggedText,
 } from "@/data/resume";
-import {
-  categorySlug,
-  highlight,
-  matchesSkill,
-  slugForSkill,
-} from "@/lib/skill-match";
+import { categorySlug, highlight, matchesSkill, slugForSkill } from "@/lib/skill-match";
 
 const TITLE = "Aaron Keuper — Senior Systems Administrator";
 const DESCRIPTION =
@@ -64,47 +60,74 @@ export const Route = createFileRoute("/")({
 const NAV = [
   { id: "profile", label: "Profile" },
   { id: "impact", label: "Impact" },
+  { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
   { id: "education", label: "Education" },
-  { id: "skills", label: "Skills" },
 ];
 
-/* Shared type scale */
-const PROSE = "max-w-[46ch] sm:max-w-[64ch] text-[1.0625rem] sm:text-[1.1875rem] leading-[1.6]";
-const SECTION_H = "text-[2rem] sm:text-[2.35rem] font-extrabold leading-[1.12]";
+const SECTION_H = "text-[2.25rem] font-extrabold leading-[1.08] text-foreground sm:text-[2.75rem]";
+
+function taggedHit(item: SkillTaggedText, active: string | null) {
+  return matchesSkill(item.text, active, item.skills);
+}
+
+function escapeSelectorValue(value: string) {
+  return window.CSS?.escape ? CSS.escape(value) : value.replace(/["\\]/g, "\\$&");
+}
 
 function Home() {
   const [locked, setLocked] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
-  const active = hovered ?? locked;
+  const [suppressedHover, setSuppressedHover] = useState<string | null>(null);
+  const active = hovered === suppressedHover ? locked : (hovered ?? locked);
+  const catSlug = slugForSkill(active);
 
-  const scrollToFirstHit = useCallback((skill: string) => {
+  const scrollToSkillList = useCallback((skill: string) => {
     requestAnimationFrame(() => {
-      const main = document.querySelector("main");
-      if (!main) return;
-      const firstMark = main.querySelector(".skill-mark");
-      if (firstMark) {
-        firstMark.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      const selector = `[data-skill-pill="${escapeSelectorValue(skill)}"]`;
+      document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   }, []);
 
-  const toggle = useCallback(
-    (skill: string) => {
-      setLocked((cur) => {
-        const next = cur === skill ? null : skill;
-        if (next) scrollToFirstHit(next);
-        return next;
+  const scrollToFirstSkillMark = useCallback((skill: string) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const selector = `[data-skill-mark="${escapeSelectorValue(skill)}"]`;
+        const marks = [...document.querySelectorAll(selector)];
+        const skillsBottom =
+          (document.querySelector("#skills")?.getBoundingClientRect().bottom ?? 0) + window.scrollY;
+        const target =
+          marks.find((mark) => mark.getBoundingClientRect().top + window.scrollY > skillsBottom) ??
+          marks[0];
+        target?.scrollIntoView({ behavior: "smooth", block: "center" });
       });
+    });
+  }, []);
+
+  const selectSkill = useCallback(
+    (skill: string) => {
+      if (locked === skill) {
+        setLocked(null);
+        setHovered(null);
+        setSuppressedHover(skill);
+        return;
+      }
+
+      setSuppressedHover(null);
+      setLocked(skill);
+      scrollToFirstSkillMark(skill);
     },
-    [scrollToFirstHit],
+    [locked, scrollToFirstSkillMark],
   );
 
-  const print = () => window.print();
-  const catSlug = slugForSkill(active);
+  const clearSkill = useCallback(() => {
+    setLocked(null);
+    setHovered(null);
+    setSuppressedHover(null);
+  }, []);
 
   return (
-    <div className={catSlug ? `cat-${catSlug}` : undefined}>
+    <div className={catSlug ? `min-h-screen cat-${catSlug}` : "min-h-screen"}>
       <a
         href="#resume"
         className="no-print sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-6 focus:z-50 focus:rounded focus:bg-foreground focus:px-3 focus:py-2 focus:text-background"
@@ -112,146 +135,39 @@ function Home() {
         Skip to content
       </a>
 
-      <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10 pt-14">
-        <div className="lg:flex lg:gap-20">
-          <aside className="print-single pt-14 lg:sticky lg:top-8 lg:h-[calc(100vh-2rem)] lg:w-[290px] lg:shrink-0 lg:overflow-y-auto lg:py-16">
-            <Identity onPrint={print} />
-            <div className="mt-16 lg:hidden">
-              <ProfileProse active={active} />
-            </div>
-            <SkillBrowser
-              active={active}
-              locked={locked}
-              onHover={setHovered}
-              onToggle={toggle}
-            />
-          </aside>
+      <Nav />
 
-          <main
-            id="resume"
-            className="print-single min-w-0 flex-1 pb-32"
-          >
-            <Nav />
-            <div className="hidden lg:block">
-              <Profile active={active} />
-            </div>
-            <Impact active={active} />
-            <Experience active={active} />
-            <Education />
-            <footer className="mt-28 border-t border-border pt-8 text-[0.95rem] text-muted-foreground">
-              <p>
-              Aaron Keuper · Santa Cruz, California · Remote U.S. ·{" "}
-                <a className="prose-link" href="mailto:keuper@duck.com">
-                  keuper@duck.com
-                </a>
-              </p>
-            </footer>
-          </main>
+      <main id="resume" className="print-single mx-auto w-full max-w-[1200px] px-5 pb-28 sm:px-8">
+        <Hero />
+        <div className="content-axis">
+          <Profile active={active} onMarkClick={scrollToSkillList} />
+          <Impact active={active} onMarkClick={scrollToSkillList} />
+          <SkillBrowser
+            active={active}
+            locked={locked}
+            onClear={clearSkill}
+            onHover={setHovered}
+            onSuppressHover={setSuppressedHover}
+            suppressedHover={suppressedHover}
+            onSelect={selectSkill}
+          />
+          <Experience active={active} onMarkClick={scrollToSkillList} />
+          <Education />
         </div>
-      </div>
+        <footer className="content-axis mt-24 border-t border-border pt-7 text-[0.95rem] leading-[1.6] text-muted-foreground">
+          <p>
+            Aaron Keuper · Santa Cruz, California · Remote U.S. ·{" "}
+            <a className="prose-link" href="tel:+18312958035">
+              (831) 295-8035
+            </a>{" "}
+            ·{" "}
+            <a className="prose-link" href="mailto:keuper@duck.com">
+              keuper@duck.com
+            </a>
+          </p>
+        </footer>
+      </main>
     </div>
-  );
-}
-
-function Identity({ onPrint }: { onPrint: () => void }) {
-  return (
-    <section className="print-block">
-      <img
-        src={aaronPhotoAsset.url}
-        alt="Aaron Keuper"
-        className="h-[128px] w-[128px] rounded-full object-cover"
-      />
-      <h1 className="mt-8 text-[2.15rem] font-extrabold leading-[1.05]">
-        Aaron Keuper
-      </h1>
-      <p className="eyebrow mt-4 text-muted-foreground">
-        Senior Systems Administrator
-      </p>
-      <p className="mt-5 text-[1rem] leading-[1.6] text-muted-foreground">
-        Santa Cruz, California
-        <br />
-        Remote U.S.
-      </p>
-      <ul className="mt-5 space-y-2 text-[1rem]">
-        <li>
-          <a className="prose-link" href="mailto:keuper@duck.com">
-            keuper@duck.com
-          </a>
-        </li>
-        <li className="no-print">
-          <button className="prose-link" type="button" onClick={onPrint}>
-            Download Résumé
-          </button>
-        </li>
-      </ul>
-    </section>
-  );
-}
-
-function SkillBrowser({
-  active,
-  locked,
-  onHover,
-  onToggle,
-}: {
-  active: string | null;
-  locked: string | null;
-  onHover: (s: string | null) => void;
-  onToggle: (s: string) => void;
-}) {
-  return (
-    <section id="skills" className="print-block mt-8 scroll-mt-12">
-      <div className="flex items-baseline justify-between gap-4">
-        <h2 className="eyebrow text-muted-foreground">Technical Skills</h2>
-        {locked ? (
-          <button
-            type="button"
-            className="no-print prose-link text-[0.9rem]"
-            onClick={() => onToggle(locked)}
-          >
-            Clear
-          </button>
-        ) : null}
-      </div>
-      <p className="no-print mt-3 text-[0.95rem] leading-[1.55] text-muted-foreground">
-        Hover, focus, or tap a skill to mark where it appears in the résumé.
-        Nothing is hidden.
-      </p>
-
-      {skillGroups.map((group) => (
-        <div
-          key={group.title}
-          className={`mt-8 cat-${categorySlug(group.title)}`}
-        >
-          <h3 className="text-[0.95rem] font-bold">{group.title}</h3>
-          <ul className="mt-3 flex flex-wrap gap-1.5">
-            {group.skills.map((skill) => {
-              const isActive = active === skill;
-              const isLocked = locked === skill;
-              return (
-                <li key={skill}>
-                  <button
-                    type="button"
-                    aria-pressed={isLocked}
-                    onMouseEnter={() => onHover(skill)}
-                    onMouseLeave={() => onHover(null)}
-                    onFocus={() => onHover(skill)}
-                    onBlur={() => onHover(null)}
-                    onClick={() => onToggle(skill)}
-                    data-state={
-                      isLocked ? "locked" : isActive ? "active" : undefined
-                    }
-                    className="pill px-2.5 py-[3px] text-[0.85rem] leading-[1.45]"
-                  >
-                    {skill}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
-    </section>
   );
 }
 
@@ -259,151 +175,243 @@ function Nav() {
   return (
     <nav
       aria-label="Sections"
-      className="no-print sticky top-0 z-10 -mx-6 mb-16 border-b border-border bg-background px-6 py-4 sm:-mx-10 sm:px-10"
+      className="no-print sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur"
     >
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[14px] font-bold tracking-[0.04em] text-[#000000]">
-        {NAV.map((item, index) => (
-          <span key={item.id} className="flex items-center gap-x-4">
-            <a
-              href={`#${item.id}`}
-              className="transition-colors hover:text-[#3c90ff]"
-            >
+      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-end px-5 py-4 sm:px-8 sm:py-[18px]">
+        <div className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 text-[0.98rem] font-medium text-foreground sm:gap-x-7">
+          {NAV.map((item) => (
+            <a key={item.id} href={`#${item.id}`} className="nav-link">
               {item.label}
             </a>
-            {index < NAV.length - 1 ? (
-              <span aria-hidden="true" className="text-muted-foreground">
-                /
-              </span>
-            ) : null}
-          </span>
-        ))}
+          ))}
+        </div>
       </div>
     </nav>
   );
 }
 
-function ProfileProse({ active }: { active: string | null }) {
-  const hit = matchesSkill(summary, active);
+function Hero() {
   return (
-    <>
-      <h2 id="profile" className={`${SECTION_H} scroll-mt-12`}>
-        Profile
-      </h2>
-      <p
-        className={`mt-7 ${PROSE} ${active ? (hit ? "resume-hit" : "resume-dim") : ""}`}
-      >
-        {highlight(summary, active)}
-      </p>
-    </>
-  );
-}
-
-function Profile({ active }: { active: string | null }) {
-  return (
-    <section className="print-block">
-      <ProfileProse active={active} />
-    </section>
-  );
-}
-
-function Impact({ active }: { active: string | null }) {
-  return (
-    <>
-      <hr className="mt-16 border-0 border-t border-border" />
-      <section className="mt-28">
-        <h2 id="impact" className={`${SECTION_H} scroll-mt-12 relative group`}>
-          <a href="#impact" className="section-anchor" aria-label="Link to Selected Impact">
-            <span aria-hidden="true">#</span>
-          </a>
-          Selected Impact
-        </h2>
-      <div className="mt-10 grid gap-x-16 gap-y-12 sm:grid-cols-2">
-        {impact.map((item) => {
-          const hit = matchesSkill(item.text, active);
-          return (
-            <article
-              key={item.figure}
-              className={`print-block max-w-[38ch] ${
-                active ? (hit ? "resume-hit" : "resume-dim") : ""
-              }`}
-            >
-              <p className="text-[3rem] font-extrabold leading-none tracking-[-0.03em]">
-                {item.figure}
-              </p>
-              <p className="mt-4 text-[1.0625rem] leading-[1.6]">
-                {highlight(item.text, active)}
-              </p>
-            </article>
-          );
-        })}
+    <section className="print-block pt-12 sm:pt-18">
+      <div className="hero-layout">
+        <img
+          src={aaronPhoto}
+          alt="Aaron Keuper"
+          width="136"
+          height="136"
+          className="h-[136px] w-[136px] rounded-full object-cover"
+        />
+        <div className="max-w-[940px]">
+          <h1 className="text-[3rem] font-extrabold leading-[1.02] text-foreground sm:text-[4rem]">
+            Aaron Keuper
+          </h1>
+          <p className="mt-4 text-[1.35rem] font-bold leading-[1.3] text-foreground sm:text-[1.7rem]">
+            Senior Systems Administrator
+          </p>
+          <p className="mt-5 max-w-[860px] text-[1.08rem] leading-[1.6] text-foreground sm:text-[1.22rem]">
+            Microsoft 365 · Entra ID · Intune · Active Directory · Endpoint &amp; Infrastructure
+            Operations
+          </p>
+          <p className="mt-3 text-[1rem] leading-[1.6] text-muted-foreground">
+            Santa Cruz, California · Remote U.S.
+          </p>
+          <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[1rem]">
+            <li>
+              <a className="prose-link" href="tel:+18312958035">
+                (831) 295-8035
+              </a>
+            </li>
+            <li>
+              <a className="prose-link" href="mailto:keuper@duck.com">
+                keuper@duck.com
+              </a>
+            </li>
+            <li className="no-print">
+              <a className="prose-link" href="/aaron-keuper-resume.pdf" download>
+                Download Resume
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <p className="mt-14 max-w-[62ch] text-[1.0625rem] leading-[1.6] text-muted-foreground">
-        Production environments have ranged from approximately 75 staff plus 400
-        conference guests through a 2,000-user regulated healthcare campus.
-      </p>
     </section>
-    </>
   );
 }
 
-function Experience({ active }: { active: string | null }) {
+function Profile({
+  active,
+  onMarkClick,
+}: {
+  active: string | null;
+  onMarkClick: (skill: string) => void;
+}) {
   return (
-    <>
-      <hr className="mt-16 border-0 border-t border-border" />
-      <section className="mt-28">
-        <h2 id="experience" className={`${SECTION_H} scroll-mt-12 relative group`}>
-          <a href="#experience" className="section-anchor" aria-label="Link to Professional Experience">
-            <span aria-hidden="true">#</span>
-          </a>
-          Professional Experience
-        </h2>
-      <div className="mt-12 space-y-20">
+    <section id="profile" className="print-block mt-16 scroll-mt-20 sm:mt-20">
+      <h2 className={`${SECTION_H}`}>Profile</h2>
+      <p className="serif-prose mt-7 max-w-[760px]">
+        {highlight(summary, active, undefined, onMarkClick)}
+      </p>
+    </section>
+  );
+}
+
+function Impact({
+  active,
+  onMarkClick,
+}: {
+  active: string | null;
+  onMarkClick: (skill: string) => void;
+}) {
+  return (
+    <section id="impact" className="mt-20 scroll-mt-20 sm:mt-24">
+      <h2 className={`${SECTION_H}`}>Selected Impact</h2>
+      <div className="mt-10 grid max-w-[980px] gap-x-20 gap-y-12 md:grid-cols-2">
+        {impact.map((item) => (
+          <article key={item.figure} className="print-block max-w-[38ch]">
+            <p className="text-[3.25rem] font-extrabold leading-none text-foreground sm:text-[3.75rem]">
+              {item.figure}
+            </p>
+            <p className="mt-5 text-[1.08rem] leading-[1.6] text-foreground">
+              {highlight(item.text, active, item.skills, onMarkClick)}
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SkillBrowser({
+  active,
+  locked,
+  onClear,
+  onHover,
+  onSuppressHover,
+  onSelect,
+  suppressedHover,
+}: {
+  active: string | null;
+  locked: string | null;
+  onClear: () => void;
+  onHover: (s: string | null) => void;
+  onSuppressHover: (s: string | null) => void;
+  onSelect: (s: string) => void;
+  suppressedHover: string | null;
+}) {
+  return (
+    <section id="skills" className="print-block mt-20 scroll-mt-20 sm:mt-24">
+      <div className="flex flex-wrap items-baseline justify-between gap-5">
+        <div>
+          <h2 className={`${SECTION_H}`}>Technical Skills</h2>
+          <p className="mt-4 max-w-[620px] text-[1rem] leading-[1.6] text-muted-foreground">
+            Hover or select a skill to see where it appears in my experience.
+          </p>
+        </div>
+        {locked ? (
+          <button type="button" className="no-print prose-link text-[0.95rem]" onClick={onClear}>
+            Clear selection
+          </button>
+        ) : null}
+      </div>
+
+      <div className="mt-10 grid max-w-[1040px] gap-x-16 gap-y-9 lg:grid-cols-2">
+        {skillGroups.map((group) => (
+          <div key={group.title} className={`cat-${categorySlug(group.title)}`}>
+            <h3 className="text-[1.08rem] font-extrabold leading-[1.3] text-foreground">
+              {group.title}
+            </h3>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {group.skills.map((skill) => {
+                const isActive = active === skill;
+                const isLocked = locked === skill;
+                return (
+                  <li key={skill}>
+                    <button
+                      type="button"
+                      aria-pressed={isLocked}
+                      onMouseEnter={() => {
+                        if (suppressedHover !== skill) onHover(skill);
+                      }}
+                      onMouseLeave={() => {
+                        onHover(null);
+                        if (suppressedHover === skill) onSuppressHover(null);
+                      }}
+                      onFocus={() => {
+                        if (suppressedHover !== skill) onHover(skill);
+                      }}
+                      onBlur={() => {
+                        onHover(null);
+                        if (suppressedHover === skill) onSuppressHover(null);
+                      }}
+                      onClick={() => onSelect(skill)}
+                      data-state={isLocked ? "locked" : isActive ? "active" : undefined}
+                      data-hover-suppressed={suppressedHover === skill ? "true" : undefined}
+                      data-skill-pill={skill}
+                      className="pill px-3 py-[6px] text-[0.92rem] leading-[1.35]"
+                    >
+                      {skill}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Experience({
+  active,
+  onMarkClick,
+}: {
+  active: string | null;
+  onMarkClick: (skill: string) => void;
+}) {
+  return (
+    <section id="experience" className="mt-20 scroll-mt-20 sm:mt-24">
+      <h2 className={`${SECTION_H}`}>Professional Experience</h2>
+      <div className="mt-12 max-w-[860px] space-y-20">
         {jobs.map((job) => {
+          const environmentHit =
+            job.environment && matchesSkill(job.environment, active, job.environmentSkills);
           const jobHit =
             matchesSkill(job.title, active) ||
             matchesSkill(job.org, active) ||
-            matchesSkill(job.environment ?? "", active) ||
-            job.bullets.some((b) => matchesSkill(b, active));
+            Boolean(environmentHit) ||
+            job.bullets.some((b) => taggedHit(b, active));
+
           return (
             <article
               key={job.org + job.dates}
-              className={`print-block ${
-                active ? (jobHit ? "resume-hit" : "resume-dim") : ""
-              }`}
+              data-skill-hit={active && jobHit ? "true" : undefined}
+              className="print-block"
             >
-              <header className="print-keep max-w-[62ch]">
-                <p className="eyebrow text-[#bf616a]">{job.dates}</p>
-                <h3 className="mt-3 text-[1.55rem] sm:text-[1.7rem] font-extrabold leading-[1.15]">
+              <header className="print-keep">
+                <h3 className="text-[1.6rem] font-extrabold leading-[1.14] text-foreground sm:text-[1.95rem]">
                   {job.title}
                 </h3>
-                <p className="mt-2 text-[1.0625rem] font-semibold">
+                <p className="mt-3 text-[1.08rem] font-bold text-foreground">
                   {job.org}
                   {job.location ? (
-                    <span className="font-normal text-muted-foreground">
-                      {" "}
-                      · {job.location}
-                    </span>
+                    <span className="font-normal text-muted-foreground"> · {job.location}</span>
                   ) : null}
                 </p>
+                <p className="mt-1 text-[0.98rem] leading-[1.5] text-muted-foreground">
+                  {job.dates}
+                </p>
                 {job.environment ? (
-                  <p className="mt-5 text-[1.0625rem] leading-[1.6] text-muted-foreground">
-                    {highlight(job.environment, active)}
+                  <p className="serif-prose mt-5">
+                    {highlight(job.environment, active, job.environmentSkills, onMarkClick)}
                   </p>
                 ) : null}
               </header>
-              <ul className="mt-7 space-y-4">
-                {job.bullets.map((bullet, i) => (
-                  <li
-                    key={i}
-                    className="relative max-w-[46ch] pl-6 text-[1.0625rem] leading-[1.6] sm:max-w-[68ch] sm:text-[1.125rem]"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-0 top-[-0.35rem] text-[2.125rem] leading-none text-[#bf616a]"
-                    >
-                      •
-                    </span>
-                    {highlight(bullet, active)}
+
+              <ul className="serif-prose mt-7 list-disc space-y-4 pl-6 marker:text-muted-foreground">
+                {job.bullets.map((bullet) => (
+                  <li key={bullet.text}>
+                    {highlight(bullet.text, active, bullet.skills, onMarkClick)}
                   </li>
                 ))}
               </ul>
@@ -412,47 +420,31 @@ function Experience({ active }: { active: string | null }) {
         })}
       </div>
     </section>
-    </>
   );
 }
 
 function Education() {
   return (
-    <>
-      <hr className="mt-16 border-0 border-t border-border" />
-      <section className="mt-28">
-        <h2 id="education" className={`${SECTION_H} scroll-mt-12 relative group`}>
-          <a href="#education" className="section-anchor" aria-label="Link to Education &amp; Professional Development">
-            <span aria-hidden="true">#</span>
-          </a>
-          Education &amp; Professional Development
-        </h2>
-      <div className="mt-10 space-y-10">
+    <section id="education" className="mt-20 scroll-mt-20 sm:mt-24">
+      <h2 className={`${SECTION_H}`}>Education &amp; Professional Development</h2>
+      <div className="mt-10 max-w-[760px] space-y-8">
         {education.map((e) => (
-          <article key={e.school} className="print-block max-w-[62ch]">
-            <h3 className="text-[1.3rem] font-bold">{e.school}</h3>
-            <p className="mt-2 text-[1.0625rem]">{e.detail}</p>
-            {e.note ? (
-              <p className="mt-2 text-[1.0625rem] leading-[1.6] text-muted-foreground">
-                {e.note}
-              </p>
-            ) : null}
+          <article key={e.school} className="print-block">
+            <h3 className="text-[1.25rem] font-extrabold leading-[1.2] text-foreground">
+              {e.school}
+            </h3>
+            <p className="mt-2 text-[1.05rem] leading-[1.6] text-foreground">{e.detail}</p>
+            {e.note ? <p className="serif-prose mt-2 text-muted-foreground">{e.note}</p> : null}
           </article>
         ))}
       </div>
 
-      <h3 className="mt-16 text-[1.3rem] font-bold">Remote Work Setup</h3>
-      <ul className="mt-5 max-w-[62ch] space-y-2 text-[1.0625rem] leading-[1.6] text-muted-foreground">
-        {remoteSetup.map((r) => (
-          <li key={r} className="relative pl-6">
-            <span aria-hidden="true" className="absolute left-0 top-[-0.35rem] text-[2.125rem] leading-none text-[#bf616a]">
-              •
-            </span>
-            {r}
-          </li>
-        ))}
-      </ul>
+      <h2 className="mt-16 text-[1.55rem] font-extrabold leading-[1.15] text-foreground">
+        Remote Work
+      </h2>
+      <p className="mt-5 max-w-[760px] text-[1.05rem] leading-[1.65] text-foreground">
+        {remoteSetup.join(" · ")}
+      </p>
     </section>
-    </>
   );
 }

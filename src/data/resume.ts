@@ -27,11 +27,11 @@ export type ImpactItem = SkillTaggedText & {
 
 export const careerPath = [
   { title: "Technical Sourcing", dates: "2013-2014", label: "Technical Sourcer" },
-  { title: "Enterprise IT", dates: "2014-2025", label: "Systems / Infrastructure Practitioner" },
+  { title: "Enterprise IT", dates: "2014-2025", label: "Systems / Infrastructure" },
   {
     title: "Technical Recruiting",
     dates: "Current Direction",
-    label: "Returning Technical Sourcer / Recruiter",
+    label: "Returning Sourcer / Recruiter",
   },
 ];
 
@@ -54,19 +54,6 @@ export const recruitingExperience: ExperienceItem[] = [
     ],
   },
   {
-    title: "Technical Sourcer / Recruiter Support",
-    org: "The Judge Group",
-    dates: "Jul 2014 - Sep 2014",
-    bullets: [
-      {
-        text: "Supported technical sourcing and recruiter workflows for enterprise client accounts including Chase, Intel, Lab126, Oracle, and Indeed.",
-      },
-      {
-        text: "Helped identify and move qualified technical candidates through active requisition pipelines.",
-      },
-    ],
-  },
-  {
     title: "Staffing / Recruiting - Contingent Workforce",
     org: "Kelly Services",
     dates: "Apr 2014 - Jun 2014",
@@ -76,6 +63,19 @@ export const recruitingExperience: ExperienceItem[] = [
       },
       {
         text: "Worked with fast-turnaround candidate identification, qualification, placement coordination, and contingent workforce operations.",
+      },
+    ],
+  },
+  {
+    title: "Technical Sourcer / Recruiter Support",
+    org: "The Judge Group",
+    dates: "Jul 2014 - Sep 2014",
+    bullets: [
+      {
+        text: "Supported technical sourcing and recruiter workflows for enterprise client accounts including Chase, Intel, Lab126, Oracle, and Indeed.",
+      },
+      {
+        text: "Helped identify and move qualified technical candidates through active requisition pipelines.",
       },
     ],
   },

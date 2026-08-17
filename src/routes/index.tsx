@@ -66,11 +66,14 @@ const NAV = [
   { id: "recruiting", label: "Recruiting" },
   { id: "technical-context", label: "Technical Context" },
   { id: "experience", label: "Experience" },
-  { id: "resume-contact", label: "Resume" },
-  { id: "resume-contact", label: "Contact" },
+  { id: "resume-contact", label: "Resume & Contact" },
 ];
 
-const SECTION_H = "text-[2.15rem] font-extrabold leading-[1.08] text-foreground sm:text-[2.65rem]";
+const SECTION_H = "text-[2.05rem] font-extrabold leading-[1.1] text-foreground sm:text-[2.5rem]";
+const PROSE_WIDTH = "max-w-[720px]";
+const EXPERIENCE_WIDTH = "max-w-[860px]";
+const SECTION_GAP = "mt-[4.5rem] scroll-mt-24 sm:mt-[5.5rem]";
+const SECTION_GAP_LARGE = "mt-[5.25rem] scroll-mt-24 sm:mt-28";
 const TECH_RESUME_PATH = "/aaron-keuper-resume.pdf";
 
 function taggedHit(item: SkillTaggedText, active: string | null) {
@@ -188,7 +191,7 @@ function Nav() {
       className="no-print sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur"
     >
       <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center px-3 py-4 sm:justify-end sm:px-8 sm:py-[18px]">
-        <div className="flex w-full max-w-[430px] flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[0.86rem] font-semibold leading-none text-foreground sm:w-auto sm:max-w-none sm:justify-end sm:gap-x-7 sm:text-[1rem]">
+        <div className="flex w-full max-w-[430px] flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[0.88rem] font-semibold leading-none text-foreground min-[520px]:max-w-none sm:w-auto sm:justify-end sm:gap-x-7 sm:text-[1rem]">
           {NAV.map((item) => (
             <a key={item.label} href={`#${item.id}`} className="nav-link">
               {item.label}
@@ -209,19 +212,21 @@ function Hero() {
           alt="Aaron Keuper"
           width="136"
           height="136"
-          className="h-[136px] w-[136px] rounded-full border-2 border-[#3b4252] object-cover"
+          className="hero-photo h-[132px] w-[132px] rounded-full border-2 border-[#3b4252] object-cover"
         />
-        <div className="max-w-[920px]">
-          <h1 className="text-[3rem] font-extrabold leading-[1.02] text-foreground sm:text-[4rem]">
+        <div className="max-w-[880px]">
+          <h1 className="text-[2.9rem] font-extrabold leading-[1.02] text-foreground sm:text-[3.85rem]">
             Aaron Keuper
           </h1>
-          <p className="mt-4 text-[1.38rem] font-bold leading-[1.28] text-foreground sm:text-[1.78rem]">
+          <p className="mt-4 text-[1.36rem] font-bold leading-[1.28] text-foreground sm:text-[1.72rem]">
             Technical Sourcer / Recruiter
           </p>
-          <p className="mt-2 text-[1.12rem] font-semibold leading-[1.45] text-foreground sm:text-[1.24rem]">
+          <p className="mt-2 text-[1.1rem] font-semibold leading-[1.45] text-foreground sm:text-[1.22rem]">
             Enterprise IT Domain Expertise
           </p>
-          <p className="mt-5 max-w-[790px] text-[1.06rem] leading-[1.62] text-foreground sm:text-[1.18rem]">
+          <p
+            className={`mt-5 ${PROSE_WIDTH} text-[1.06rem] leading-[1.62] text-foreground sm:text-[1.16rem]`}
+          >
             Former agency technical sourcer returning to recruiting after more than a decade in
             hands-on enterprise technology operations.
           </p>
@@ -261,7 +266,7 @@ function About({
   return (
     <section id="about" className="print-block mt-16 scroll-mt-24 sm:mt-20">
       <h2 className={`${SECTION_H}`}>About</h2>
-      <p className="serif-prose mt-7 max-w-[790px]">
+      <p className={`serif-prose mt-6 ${PROSE_WIDTH}`}>
         {highlight(summary, active, undefined, onMarkClick)}
       </p>
       <CareerPath />
@@ -272,13 +277,17 @@ function About({
 function CareerPath() {
   return (
     <ol className="career-path mt-9 max-w-[880px]" aria-label="Career path">
-      {careerPath.map((item) => (
-        <li key={item.title} className="career-path-item">
+      {careerPath.map((item, index) => (
+        <li
+          key={item.title}
+          className="career-path-item"
+          data-current={index === careerPath.length - 1 ? "true" : undefined}
+        >
           <p className="text-[1.08rem] font-extrabold leading-[1.25] text-foreground">
             {item.title}
           </p>
           <p className="mt-1 text-[0.95rem] font-semibold leading-[1.35] text-muted-foreground">
-            {item.dates}
+            <span className="career-path-date">{item.dates}</span>
           </p>
           <p className="mt-3 text-[0.98rem] leading-[1.45] text-foreground">{item.label}</p>
         </li>
@@ -289,9 +298,9 @@ function CareerPath() {
 
 function RecruitingExperience() {
   return (
-    <section id="recruiting" className="mt-20 scroll-mt-24 sm:mt-24">
+    <section id="recruiting" className={SECTION_GAP_LARGE}>
       <h2 className={`${SECTION_H}`}>Recruiting &amp; Sourcing Experience</h2>
-      <div className="mt-10 max-w-[860px] space-y-12">
+      <div className={`mt-9 ${EXPERIENCE_WIDTH} space-y-10`}>
         {recruitingExperience.map((item) => (
           <ExperienceArticle key={item.org + item.dates} item={item} />
         ))}
@@ -307,13 +316,13 @@ function ExperienceArticle({ item }: { item: ExperienceItem }) {
         <h3 className="text-[1.42rem] font-extrabold leading-[1.18] text-foreground sm:text-[1.7rem]">
           {item.title}
         </h3>
-        <p className="mt-3 text-[1.06rem] font-bold text-foreground">
+        <p className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[1.06rem] font-bold text-foreground">
           {item.org}
           {item.location ? (
             <span className="font-normal text-muted-foreground"> · {item.location}</span>
           ) : null}
+          <span className="font-normal text-muted-foreground">· {item.dates}</span>
         </p>
-        <p className="mt-1 text-[0.98rem] leading-[1.5] text-muted-foreground">{item.dates}</p>
       </header>
       <ul className="serif-prose mt-6 list-disc space-y-3 pl-6 marker:text-muted-foreground">
         {item.bullets.map((bullet) => (
@@ -342,15 +351,15 @@ function TechnicalDomains({
   suppressedHover: string | null;
 }) {
   return (
-    <section id="technical-context" className="print-block mt-20 scroll-mt-24 sm:mt-24">
+    <section id="technical-context" className={`print-block ${SECTION_GAP_LARGE}`}>
       <div className="flex flex-wrap items-baseline justify-between gap-5">
         <div>
           <h2 className={`${SECTION_H}`}>Technical Domains I Understand</h2>
-          <p className="mt-4 max-w-[700px] text-[1rem] leading-[1.65] text-foreground">
+          <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
             My IT background gives me practical context for the technologies, responsibilities, and
             adjacent skills that appear in infrastructure and support requisitions.
           </p>
-          <p className="mt-3 max-w-[700px] text-[0.98rem] leading-[1.6] text-muted-foreground">
+          <p className={`discovery-note mt-3 ${PROSE_WIDTH}`}>
             Hover, focus, or select a term to see where it appears in the technical experience.
           </p>
         </div>
@@ -416,11 +425,11 @@ function TechnicalDomains({
 
 function RolesUnderstood() {
   return (
-    <section className="mt-20 scroll-mt-24 sm:mt-24" aria-labelledby="roles-understood">
+    <section className={SECTION_GAP} aria-labelledby="roles-understood">
       <h2 id="roles-understood" className={`${SECTION_H}`}>
         Technical Roles I Understand
       </h2>
-      <p className="mt-4 max-w-[700px] text-[1rem] leading-[1.65] text-foreground">
+      <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
         Roles and working environments I have direct professional context for through my own
         technology career.
       </p>
@@ -441,15 +450,15 @@ function TechnicalCareerHighlights({
   onMarkClick: (skill: string) => void;
 }) {
   return (
-    <section className="mt-20 scroll-mt-24 sm:mt-24">
+    <section className={SECTION_GAP}>
       <h2 className={`${SECTION_H}`}>Technical Career Highlights</h2>
-      <p className="mt-4 max-w-[700px] text-[1rem] leading-[1.65] text-foreground">
-        These are technical career scope markers, not recruiting metrics.
+      <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
+        A few examples of the scale and environments behind my technical domain experience.
       </p>
-      <div className="mt-9 grid max-w-[980px] gap-x-16 gap-y-9 md:grid-cols-2">
+      <div className="mt-8 grid max-w-[920px] gap-x-14 gap-y-8 md:grid-cols-2">
         {impact.map((item) => (
           <article key={item.figure} className="print-block max-w-[36ch]">
-            <p className="text-[2.6rem] font-extrabold leading-none text-foreground sm:text-[3.1rem]">
+            <p className="text-[2.35rem] font-extrabold leading-none text-foreground sm:text-[2.85rem]">
               {item.figure}
             </p>
             <p className="mt-4 text-[1.03rem] leading-[1.6] text-foreground">
@@ -470,14 +479,14 @@ function EnterpriseExperience({
   onMarkClick: (skill: string) => void;
 }) {
   return (
-    <section id="experience" className="mt-20 scroll-mt-24 sm:mt-24">
+    <section id="experience" className={SECTION_GAP_LARGE}>
       <h2 className={`${SECTION_H}`}>Enterprise IT Experience</h2>
-      <p className="mt-4 max-w-[720px] text-[1rem] leading-[1.65] text-foreground">
+      <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
         More than a decade of hands-on technology operations provides the technical context I now
         bring back into sourcing and recruiting.
       </p>
-      <div className="mt-12 max-w-[860px] space-y-16">
-        {jobs.map((job) => {
+      <div className={`mt-11 ${EXPERIENCE_WIDTH} space-y-14`}>
+        {jobs.map((job, index) => {
           const environmentHit =
             job.environment && matchesSkill(job.environment, active, job.environmentSkills);
           const jobHit =
@@ -490,6 +499,7 @@ function EnterpriseExperience({
             <article
               key={job.org + job.dates}
               data-skill-hit={active && jobHit ? "true" : undefined}
+              data-density={index < 2 ? "featured" : index < 4 ? "standard" : "compact"}
               className="print-block experience-entry"
             >
               <header className="print-keep">
@@ -529,9 +539,9 @@ function EnterpriseExperience({
 
 function Education() {
   return (
-    <section id="education" className="mt-20 scroll-mt-24 sm:mt-24">
+    <section id="education" className={SECTION_GAP_LARGE}>
       <h2 className={`${SECTION_H}`}>Education &amp; Professional Development</h2>
-      <div className="mt-10 max-w-[760px] space-y-8">
+      <div className={`${PROSE_WIDTH} mt-9 space-y-7`}>
         {education.map((e, index) => (
           <article key={e.school + e.detail + index} className="print-block">
             <h3 className="text-[1.25rem] font-extrabold leading-[1.2] text-foreground">
@@ -543,10 +553,10 @@ function Education() {
         ))}
       </div>
 
-      <h2 className="mt-16 text-[1.55rem] font-extrabold leading-[1.15] text-foreground">
+      <h2 className="mt-12 text-[1.2rem] font-extrabold leading-[1.2] text-foreground">
         Remote Work
       </h2>
-      <p className="mt-5 max-w-[760px] text-[1.05rem] leading-[1.65] text-foreground">
+      <p className={`mt-3 ${PROSE_WIDTH} text-[1rem] leading-[1.6] text-foreground`}>
         {remoteSetup.join(" · ")}
       </p>
     </section>
@@ -555,9 +565,9 @@ function Education() {
 
 function ResumeContact() {
   return (
-    <section id="resume-contact" className="mt-20 scroll-mt-24 sm:mt-24">
+    <section id="resume-contact" className={SECTION_GAP_LARGE}>
       <h2 className={`${SECTION_H}`}>Let's Talk</h2>
-      <p className="mt-5 max-w-[720px] text-[1.05rem] leading-[1.65] text-foreground">
+      <p className={`mt-5 ${PROSE_WIDTH} text-[1.05rem] leading-[1.65] text-foreground`}>
         I'm currently pursuing remote U.S. opportunities in technical sourcing, recruiting support,
         and junior technical recruiting.
       </p>

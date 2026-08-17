@@ -73,7 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Aaron Keuper — Senior Systems Administrator" },
+      { title: "Aaron Keuper | Technical Sourcer & Recruiter" },
       { name: "author", content: "Aaron Keuper" },
       { property: "og:site_name", content: "Aaron Keuper" },
       { property: "og:type", content: "website" },

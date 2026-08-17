@@ -65,11 +65,10 @@ export function highlight(
 }
 
 const CATEGORY_SLUGS: Record<string, string> = {
-  "Microsoft 365 & Identity": "identity",
+  "Microsoft Cloud & Identity": "identity",
   "Endpoint & Device Management": "endpoint",
-  "Infrastructure & Monitoring": "infrastructure",
-  "Security & IT Operations": "security",
-  "Business Systems & Delivery": "business",
+  "Infrastructure & Networking": "infrastructure",
+  "IT Operations & Security": "security",
 };
 
 export function categorySlug(groupTitle: string): string {

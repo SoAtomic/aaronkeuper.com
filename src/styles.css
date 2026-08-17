@@ -235,6 +235,40 @@
     color: var(--link-hover);
   }
 
+  .prose-link[data-placeholder="true"] {
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .resume-link {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    color: var(--link);
+    cursor: default;
+    display: inline-flex;
+    flex-wrap: wrap;
+    font: inherit;
+    font-weight: 650;
+    gap: 0.45rem;
+    padding: 0;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .resume-link-primary {
+    color: var(--foreground);
+  }
+
+  .resume-link-note {
+    color: var(--muted-foreground);
+    font-size: 0.86em;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
   .nav-link {
     color: var(--ink);
     text-decoration: none;
@@ -299,6 +333,87 @@
     box-shadow: 0 0 0 2px var(--cat-pale);
     color: inherit;
     outline: 0;
+  }
+
+  .career-path {
+    display: grid;
+    gap: 0;
+    list-style: none;
+    padding: 0;
+  }
+
+  .career-path-item {
+    border-left: 2px solid var(--border);
+    min-height: 8.5rem;
+    padding: 0 0 2rem 1.35rem;
+    position: relative;
+  }
+
+  .career-path-item::before {
+    background: var(--background);
+    border: 2px solid var(--ink);
+    border-radius: 9999px;
+    content: "";
+    height: 0.85rem;
+    left: -0.48rem;
+    position: absolute;
+    top: 0.25rem;
+    width: 0.85rem;
+  }
+
+  .career-path-item:last-child {
+    min-height: 0;
+    padding-bottom: 0;
+  }
+
+  .role-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .role-list li {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    color: var(--ink);
+    font-size: 0.96rem;
+    font-weight: 650;
+    line-height: 1.35;
+    padding: 0.46rem 0.62rem;
+  }
+
+  .experience-entry {
+    border-left: 3px solid transparent;
+    padding-left: 1rem;
+    transition:
+      border-color 140ms ease,
+      background-color 140ms ease;
+  }
+
+  .experience-entry[data-skill-hit="true"] {
+    background: color-mix(in srgb, var(--cat-pale) 42%, transparent);
+    border-left-color: var(--cat-strong);
+  }
+
+  @media (min-width: 760px) {
+    .career-path {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .career-path-item {
+      border-left: 0;
+      border-top: 2px solid var(--border);
+      min-height: 0;
+      padding: 1.35rem 1.4rem 0 0;
+    }
+
+    .career-path-item::before {
+      left: 0;
+      top: -0.48rem;
+    }
   }
 }
 

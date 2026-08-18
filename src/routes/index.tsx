@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
-import aaronPhoto from "@/assets/aaron-keuper.jpeg";
+import aaronPhoto from "@/assets/aaron-keuper-profile.png";
 import {
   careerPath,
   education,
@@ -213,13 +213,13 @@ function Hero() {
           alt="Aaron Keuper"
           width="136"
           height="136"
-          className="hero-photo h-[132px] w-[132px] rounded-full border-2 border-[#3b4252] object-cover"
+          className="hero-photo h-[132px] w-[132px] rounded-full border-[3px] border-[#3b4252] object-cover"
         />
         <div className="max-w-[880px]">
           <h1 className="text-[2.9rem] font-extrabold leading-[1.02] text-foreground sm:text-[3.85rem]">
             Aaron Keuper
           </h1>
-          <p className="mt-4 text-[1.36rem] font-bold leading-[1.28] text-foreground sm:text-[1.72rem]">
+          <p className="mt-4 text-[1.36rem] font-bold leading-[1.28] text-[#bf616a] sm:text-[1.72rem]">
             Technical Sourcer / Recruiter
           </p>
           <p className="mt-2 text-[1.1rem] font-semibold leading-[1.45] text-foreground sm:text-[1.22rem]">
@@ -312,20 +312,33 @@ function ExperienceArticle({ item }: { item: ExperienceItem }) {
           {item.title}
         </h3>
         <p className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[1.06rem] font-bold text-foreground">
-          {item.org}
+          <span className="company-name">{item.org}</span>
           {item.location ? (
             <span className="font-normal text-muted-foreground"> · {item.location}</span>
           ) : null}
           <span className="font-normal text-muted-foreground">· {item.dates}</span>
         </p>
       </header>
-      <ul className="serif-prose mt-6 list-disc space-y-3 pl-6 marker:text-muted-foreground">
+      <ul className="serif-prose history-list mt-6 list-disc space-y-3 pl-6">
         {item.bullets.map((bullet) => (
           <li key={bullet.text}>{bullet.text}</li>
         ))}
       </ul>
     </article>
   );
+}
+
+function OrganizationName({ org }: { org: string }) {
+  if (org === "Milestone Technologies - Google Chrome Help Desk") {
+    return (
+      <>
+        <span className="company-name">Milestone Technologies</span>
+        <span className="text-foreground"> - Google Chrome Help Desk</span>
+      </>
+    );
+  }
+
+  return <span className="company-name">{org}</span>;
 }
 
 function TechnicalDomains({
@@ -502,7 +515,7 @@ function EnterpriseExperience({
                   {job.title}
                 </h3>
                 <p className="mt-3 text-[1.06rem] font-bold text-foreground">
-                  {job.org}
+                  <OrganizationName org={job.org} />
                   {job.location ? (
                     <span className="font-normal text-muted-foreground"> · {job.location}</span>
                   ) : null}
@@ -517,7 +530,7 @@ function EnterpriseExperience({
                 ) : null}
               </header>
 
-              <ul className="serif-prose mt-6 list-disc space-y-3 pl-6 marker:text-muted-foreground">
+              <ul className="serif-prose history-list mt-6 list-disc space-y-3 pl-6">
                 {job.bullets.map((bullet) => (
                   <li key={bullet.text}>
                     {highlight(bullet.text, active, bullet.skills, onMarkClick)}

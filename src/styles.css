@@ -353,6 +353,15 @@
     padding-bottom: 0;
   }
 
+  .company-name,
+  .history-list li::marker {
+    color: #bf616a;
+  }
+
+  .history-list li {
+    color: #000000;
+  }
+
   .role-list {
     display: flex;
     flex-wrap: wrap;

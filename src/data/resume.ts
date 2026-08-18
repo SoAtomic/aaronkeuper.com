@@ -334,7 +334,7 @@ export const jobs: Job[] = [
     title: "Computer Systems Support",
     org: "Fire Department of the City of New York (FDNY)",
     location: "Brooklyn, NY",
-    dates: "2010 - 2011",
+    dates: "2009 - 2010",
     bullets: [
       {
         text: "Supported encrypted mobile workstations used by Fire Inspection and Arson Investigation teams, providing endpoint, infrastructure, and user support during organizational restructuring.",
@@ -343,33 +343,28 @@ export const jobs: Job[] = [
     ],
   },
   {
-    title: "IT Manager / Trading Systems Support",
-    org: "Team Trading / VCM Trading",
-    location: "New York, NY",
-    dates: "2007 - 2009",
+    title: "Earlier Capital Markets Technology & Operations",
+    org: "New York, NY",
+    dates: "2003 - 2009",
     bullets: [
       {
-        text: "Supported 15 in-house traders and executives plus approximately 500 distributed day-trading students worldwide across day trading, Forex, education, conferences, and trade-show operations.",
+        text: "VCM Trading (became Team Trading) - IT Manager, 2007-2009.",
         skills: ["Incident Management"],
       },
       {
-        text: "Maintained trading workstations, network connectivity, conferencing systems, and rapid incident response where downtime directly affected live market activity.",
-        skills: ["Incident Management", "Endpoint Security"],
+        text: "Legend Securities - Executive Assistant & Trade Reconciliation, 2006.",
+        skills: ["Incident Management"],
       },
-    ],
-  },
-  {
-    title: "IT Manager",
-    org: "Barkley Trading",
-    location: "New York, NY",
-    dates: "2005 - 2006",
-    bullets: [
       {
-        text: "Supported 25 traders across three branch offices, maintaining trading desks, servers, endpoints, networking, and business-critical settlement and reconciliation workflows.",
+        text: "E*TRADE Capital Markets - Trade Support, 2005-2006.",
+        skills: ["Incident Management"],
+      },
+      {
+        text: "Barkley Trading - Contractor, IT Manager, 2003-2005.",
         skills: ["Windows Server", "Endpoint Security", "Incident Management"],
       },
       {
-        text: "Additional capital-markets support engagements included A.B. Watley and E*TRADE Capital Markets.",
+        text: "A.B. Watley - Remote Trade Systems Support, 2003-2005.",
         skills: ["Incident Management"],
       },
     ],

@@ -226,33 +226,8 @@
     visibility: hidden;
   }
 
-  .resume-link {
-    align-items: center;
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    color: var(--link);
-    cursor: default;
-    display: inline-flex;
-    flex-wrap: wrap;
-    font: inherit;
-    font-weight: 650;
-    gap: 0.45rem;
-    padding: 0;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-  }
-
   .resume-link-primary {
     color: var(--foreground);
-  }
-
-  .resume-link-note {
-    color: var(--muted-foreground);
-    font-size: 0.86em;
-    font-weight: 600;
-    text-decoration: none;
   }
 
   .nav-link {

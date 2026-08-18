@@ -74,7 +74,8 @@ const PROSE_WIDTH = "max-w-[720px]";
 const EXPERIENCE_WIDTH = "max-w-[860px]";
 const SECTION_GAP = "mt-[4.5rem] scroll-mt-24 sm:mt-[5.5rem]";
 const SECTION_GAP_LARGE = "mt-[5.25rem] scroll-mt-24 sm:mt-28";
-const TECH_RESUME_PATH = "/aaron-keuper-resume.pdf";
+const RECRUITING_RESUME_PATH = "/aaron-keuper-technical-recruiting-resume.pdf";
+const SYSADMIN_RESUME_PATH = "/aaron-keuper-resume.pdf";
 
 function taggedHit(item: SkillTaggedText, active: string | null) {
   return matchesSkill(item.text, active, item.skills);
@@ -234,16 +235,10 @@ function Hero() {
             Santa Cruz, California · Remote U.S.
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-[1rem]">
-            <button
-              type="button"
-              className="resume-link resume-link-primary"
-              aria-disabled="true"
-              title="Technical recruiting resume PDF can be connected when the file is added."
-            >
+            <a className="prose-link resume-link-primary" href={RECRUITING_RESUME_PATH} download>
               Technical Recruiting Resume
-              <span className="resume-link-note">PDF pending</span>
-            </button>
-            <a className="prose-link" href={TECH_RESUME_PATH} download>
+            </a>
+            <a className="prose-link" href={SYSADMIN_RESUME_PATH} download>
               Senior Systems Administrator Resume
             </a>
             <a className="prose-link" href="mailto:keuper@duck.com">
@@ -578,16 +573,10 @@ function ResumeContact() {
         <a className="prose-link" href="mailto:keuper@duck.com">
           Email Aaron
         </a>
-        <button
-          type="button"
-          className="resume-link resume-link-primary"
-          aria-disabled="true"
-          title="Technical recruiting resume PDF can be connected when the file is added."
-        >
+        <a className="prose-link resume-link-primary" href={RECRUITING_RESUME_PATH} download>
           Technical Recruiting Resume
-          <span className="resume-link-note">PDF pending</span>
-        </button>
-        <a className="prose-link" href={TECH_RESUME_PATH} download>
+        </a>
+        <a className="prose-link" href={SYSADMIN_RESUME_PATH} download>
           Senior Systems Administrator Resume
         </a>
       </div>

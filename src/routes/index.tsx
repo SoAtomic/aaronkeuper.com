@@ -208,13 +208,15 @@ function Hero() {
   return (
     <section className="print-block pt-12 sm:pt-18">
       <div className="hero-layout">
-        <img
-          src={aaronPhoto}
-          alt="Aaron Keuper"
-          width="136"
-          height="136"
-          className="hero-photo h-[132px] w-[132px] rounded-full border-[5px] border-[#d8dee9] object-cover"
-        />
+        <div className="hero-photo h-[132px] w-[132px] overflow-hidden rounded-full border-[5px] border-[#d8dee9]">
+          <img
+            src={aaronPhoto}
+            alt="Aaron Keuper"
+            width="136"
+            height="136"
+            className="h-full w-full translate-y-[11px] scale-[1.16] object-cover"
+          />
+        </div>
         <div className="max-w-[880px]">
           <h1 className="text-[2.9rem] font-extrabold leading-[1.02] text-foreground sm:text-[3.85rem]">
             Aaron Keuper

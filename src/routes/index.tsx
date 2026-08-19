@@ -11,6 +11,7 @@ import {
   rolesUnderstood,
   skillGroups,
   summary,
+  technicalFluencyGroups,
   type ExperienceItem,
   type SkillTaggedText,
 } from "@/data/resume";
@@ -49,7 +50,10 @@ export const Route = createFileRoute("/")({
             addressRegion: "CA",
             addressCountry: "US",
           },
-          knowsAbout: skillGroups.flatMap((g) => g.skills),
+          knowsAbout: [
+            ...skillGroups.flatMap((g) => g.skills),
+            ...technicalFluencyGroups.flatMap((g) => g.skills),
+          ],
           alumniOf: education.map((e) => ({
             "@type": "EducationalOrganization",
             name: e.school,
@@ -76,6 +80,13 @@ const SECTION_GAP = "mt-[4.5rem] scroll-mt-24 sm:mt-[5.5rem]";
 const SECTION_GAP_LARGE = "mt-[5.25rem] scroll-mt-24 sm:mt-28";
 const RECRUITING_RESUME_PATH = "/aaron-keuper-technical-recruiting-resume.pdf";
 const SYSADMIN_RESUME_PATH = "/aaron-keuper-resume.pdf";
+const evidenceBackedSkills = new Set([
+  ...impact.flatMap((item) => item.skills ?? []),
+  ...jobs.flatMap((job) => [
+    ...(job.environmentSkills ?? []),
+    ...job.bullets.flatMap((bullet) => bullet.skills ?? []),
+  ]),
+]);
 
 function taggedHit(item: SkillTaggedText, active: string | null) {
   return matchesSkill(item.text, active, item.skills);
@@ -110,6 +121,8 @@ function Home() {
         const target =
           marks.find((mark) => mark.getBoundingClientRect().top + window.scrollY > skillsBottom) ??
           marks[0];
+        const parentDetails = target?.closest("details");
+        if (parentDetails && !parentDetails.open) parentDetails.open = true;
         target?.scrollIntoView({ behavior: "smooth", block: "center" });
       });
     });
@@ -364,13 +377,13 @@ function TechnicalDomains({
     <section id="technical-context" className={`print-block ${SECTION_GAP_LARGE}`}>
       <div className="flex flex-wrap items-baseline justify-between gap-5">
         <div>
-          <h2 className={`${SECTION_H}`}>Technical Domains I Understand</h2>
+          <h2 className={`${SECTION_H}`}>Technologies</h2>
           <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
-            My IT background gives me practical context for the technologies, responsibilities, and
-            adjacent skills that appear in infrastructure and support requisitions.
+            Technical context I bring to sourcing and recruiting, from hands-on enterprise
+            operations, personal projects, and prior recruiting exposure.
           </p>
           <p className={`discovery-note mt-3 ${PROSE_WIDTH}`}>
-            Hover, focus, or select a term to see where it appears in the technical experience.
+            Select a hands-on technology to see where it appears in my technical experience.
           </p>
         </div>
         <button
@@ -385,49 +398,106 @@ function TechnicalDomains({
         </button>
       </div>
 
-      <div className="mt-10 grid max-w-[1040px] gap-x-16 gap-y-9 lg:grid-cols-2">
-        {skillGroups.map((group) => (
-          <div key={group.title} className={`cat-${categorySlug(group.title)}`}>
-            <h3 className="text-[1.08rem] font-extrabold leading-[1.3] text-foreground">
-              {group.title}
-            </h3>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {group.skills.map((skill) => {
-                const isActive = active === skill;
-                const isLocked = locked === skill;
-                return (
-                  <li key={skill}>
-                    <button
-                      type="button"
-                      aria-pressed={isLocked}
-                      onMouseEnter={() => {
-                        if (suppressedHover !== skill) onHover(skill);
-                      }}
-                      onMouseLeave={() => {
-                        onHover(null);
-                        if (suppressedHover === skill) onSuppressHover(null);
-                      }}
-                      onFocus={() => {
-                        if (suppressedHover !== skill) onHover(skill);
-                      }}
-                      onBlur={() => {
-                        onHover(null);
-                        if (suppressedHover === skill) onSuppressHover(null);
-                      }}
-                      onClick={() => onSelect(skill)}
-                      data-state={isLocked ? "locked" : isActive ? "active" : undefined}
-                      data-hover-suppressed={suppressedHover === skill ? "true" : undefined}
-                      data-skill-pill={skill}
-                      className="pill px-3 py-[7px] text-[0.94rem] leading-[1.35]"
-                    >
-                      {skill}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+      <div className="technologies-layout mt-10 max-w-[1040px]">
+        <section aria-labelledby="hands-on-experience">
+          <h3
+            id="hands-on-experience"
+            className="text-[1.28rem] font-extrabold leading-[1.25] text-foreground"
+          >
+            Hands-On Experience
+          </h3>
+          <p className="mt-2 max-w-[680px] text-[0.98rem] leading-[1.55] text-muted-foreground">
+            Professional IT environments where I personally worked with the systems, tools, and
+            practices.
+          </p>
+          <div className="mt-7 grid gap-x-14 gap-y-8 lg:grid-cols-3">
+            {skillGroups.map((group) => (
+              <div key={group.title} className={`cat-${categorySlug(group.title)}`}>
+                <h4 className="text-[1.02rem] font-extrabold leading-[1.3] text-foreground">
+                  {group.title}
+                </h4>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {group.skills.map((skill) => {
+                    const isActive = active === skill;
+                    const isLocked = locked === skill;
+                    const hasEvidence = evidenceBackedSkills.has(skill);
+                    if (!hasEvidence) {
+                      return (
+                        <li key={skill}>
+                          <span className="pill pill-static px-3 py-[7px] text-[0.94rem] leading-[1.35]">
+                            {skill}
+                          </span>
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li key={skill}>
+                        <button
+                          type="button"
+                          aria-pressed={isLocked}
+                          onMouseEnter={() => {
+                            if (suppressedHover !== skill) onHover(skill);
+                          }}
+                          onMouseLeave={() => {
+                            onHover(null);
+                            if (suppressedHover === skill) onSuppressHover(null);
+                          }}
+                          onFocus={() => {
+                            if (suppressedHover !== skill) onHover(skill);
+                          }}
+                          onBlur={() => {
+                            onHover(null);
+                            if (suppressedHover === skill) onSuppressHover(null);
+                          }}
+                          onClick={() => onSelect(skill)}
+                          data-state={isLocked ? "locked" : isActive ? "active" : undefined}
+                          data-hover-suppressed={suppressedHover === skill ? "true" : undefined}
+                          data-skill-pill={skill}
+                          className="pill px-3 py-[7px] text-[0.94rem] leading-[1.35]"
+                        >
+                          {skill}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
           </div>
-        ))}
+        </section>
+
+        <section aria-labelledby="technical-fluency">
+          <h3
+            id="technical-fluency"
+            className="text-[1.28rem] font-extrabold leading-[1.25] text-foreground"
+          >
+            Technical Fluency
+          </h3>
+          <p className="mt-2 max-w-[680px] text-[0.98rem] leading-[1.55] text-muted-foreground">
+            Familiarity that helps me follow role context, terminology, adjacent skills, and
+            candidate backgrounds at a useful sourcing level.
+          </p>
+          <div className="mt-7 grid gap-x-14 gap-y-8 md:grid-cols-2">
+            {technicalFluencyGroups.map((group) => (
+              <div key={group.title}>
+                <h4 className="text-[1.02rem] font-extrabold leading-[1.3] text-foreground">
+                  {group.title}
+                </h4>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {group.skills.map((skill) => (
+                    <li key={skill}>
+                      <span className="fluency-pill" title={group.label}>
+                        {skill}
+                        <span className="sr-only">, {group.label}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </section>
   );
@@ -439,7 +509,7 @@ function RolesUnderstood() {
       <h2 id="roles-understood" className={`${SECTION_H}`}>
         Technical Roles I Understand
       </h2>
-      <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
+      <p className="mt-4 max-w-[920px] text-[1rem] leading-[1.65] text-foreground lg:whitespace-nowrap">
         Roles and working environments I have direct professional context for through my own
         technology career.
       </p>
@@ -490,59 +560,62 @@ function EnterpriseExperience({
 }) {
   return (
     <section id="experience" className={SECTION_GAP_LARGE}>
-      <h2 className={`${SECTION_H}`}>Enterprise IT Experience</h2>
+      <h2 className={`${SECTION_H}`}>Technical Career</h2>
       <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
-        More than a decade of hands-on technology operations provides the technical context I now
-        bring back into sourcing and recruiting.
+        More than two decades of hands-on IT experience underpin the technical context I bring to
+        recruiting.
       </p>
-      <div className={`mt-11 ${EXPERIENCE_WIDTH} space-y-14`}>
-        {jobs.map((job, index) => {
-          const environmentHit =
-            job.environment && matchesSkill(job.environment, active, job.environmentSkills);
-          const jobHit =
-            matchesSkill(job.title, active) ||
-            matchesSkill(job.org, active) ||
-            Boolean(environmentHit) ||
-            job.bullets.some((b) => taggedHit(b, active));
+      <details className="technical-career-accordion mt-8 max-w-[900px]">
+        <summary>View full Systems Administrator / Engineering career</summary>
+        <div className={`mt-10 ${EXPERIENCE_WIDTH} space-y-14`}>
+          {jobs.map((job, index) => {
+            const environmentHit =
+              job.environment && matchesSkill(job.environment, active, job.environmentSkills);
+            const jobHit =
+              matchesSkill(job.title, active) ||
+              matchesSkill(job.org, active) ||
+              Boolean(environmentHit) ||
+              job.bullets.some((b) => taggedHit(b, active));
 
-          return (
-            <article
-              key={job.org + job.dates}
-              data-skill-hit={active && jobHit ? "true" : undefined}
-              data-density={index < 2 ? "featured" : index < 4 ? "standard" : "compact"}
-              className="print-block experience-entry"
-            >
-              <header className="print-keep">
-                <h3 className="text-[1.42rem] font-extrabold leading-[1.18] text-foreground sm:text-[1.72rem]">
-                  {job.title}
-                </h3>
-                <p className="mt-3 text-[1.06rem] font-bold text-foreground">
-                  <OrganizationName org={job.org} />
-                  {job.location ? (
-                    <span className="font-normal text-muted-foreground"> · {job.location}</span>
-                  ) : null}
-                </p>
-                <p className="mt-1 text-[0.98rem] leading-[1.5] text-muted-foreground">
-                  {job.dates}
-                </p>
-                {job.environment ? (
-                  <p className="serif-prose mt-5">
-                    {highlight(job.environment, active, job.environmentSkills, onMarkClick)}
+            return (
+              <article
+                key={job.org + job.dates}
+                data-skill-hit={active && jobHit ? "true" : undefined}
+                data-density={index < 2 ? "featured" : index < 4 ? "standard" : "compact"}
+                className="print-block experience-entry"
+              >
+                <header className="print-keep">
+                  <h3 className="text-[1.42rem] font-extrabold leading-[1.18] text-foreground sm:text-[1.72rem]">
+                    {job.title}
+                  </h3>
+                  <p className="mt-3 text-[1.06rem] font-bold text-foreground">
+                    <OrganizationName org={job.org} />
+                    {job.location ? (
+                      <span className="font-normal text-muted-foreground"> · {job.location}</span>
+                    ) : null}
                   </p>
-                ) : null}
-              </header>
+                  <p className="mt-1 text-[0.98rem] leading-[1.5] text-muted-foreground">
+                    {job.dates}
+                  </p>
+                  {job.environment ? (
+                    <p className="serif-prose mt-5">
+                      {highlight(job.environment, active, job.environmentSkills, onMarkClick)}
+                    </p>
+                  ) : null}
+                </header>
 
-              <ul className="serif-prose history-list mt-6 list-disc space-y-3 pl-6">
-                {job.bullets.map((bullet) => (
-                  <li key={bullet.text}>
-                    {highlight(bullet.text, active, bullet.skills, onMarkClick)}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          );
-        })}
-      </div>
+                <ul className="serif-prose history-list mt-6 list-disc space-y-3 pl-6">
+                  {job.bullets.map((bullet) => (
+                    <li key={bullet.text}>
+                      {highlight(bullet.text, active, bullet.skills, onMarkClick)}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
+        </div>
+      </details>
     </section>
   );
 }

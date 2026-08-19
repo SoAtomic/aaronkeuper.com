@@ -3,6 +3,12 @@ export type SkillGroup = {
   skills: string[];
 };
 
+export type FluencyGroup = {
+  title: string;
+  label: "Personal Projects" | "Recruiting Context";
+  skills: string[];
+};
+
 export type SkillTaggedText = {
   text: string;
   skills?: string[];
@@ -83,7 +89,7 @@ export const recruitingExperience: ExperienceItem[] = [
 
 export const skillGroups: SkillGroup[] = [
   {
-    title: "Microsoft Cloud & Identity",
+    title: "Cloud & Identity",
     skills: [
       "Microsoft 365",
       "Entra ID",
@@ -96,43 +102,54 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
-    title: "Endpoint & Device Management",
+    title: "Endpoint & Infrastructure",
     skills: [
       "Microsoft Intune",
       "Windows",
       "macOS",
       "ChromeOS",
-      "Apple Business Manager",
-      "Endpoint Security",
-      "Device Compliance",
-      "Application Deployment",
-    ],
-  },
-  {
-    title: "Infrastructure & Networking",
-    skills: [
       "Windows Server",
+      "Apple Business Manager",
       "Enterprise Wi-Fi",
       "Juniper",
       "Aruba",
       "Ruckus",
       "Ubiquiti",
       "VLANs",
-      "Monitoring",
-      "Backup & Recovery",
     ],
   },
   {
-    title: "IT Operations & Security",
+    title: "Operations & Security",
     skills: [
+      "Monitoring",
       "Incident Management",
       "Change Management",
       "Patch Management",
       "Root Cause Analysis",
+      "Backup & Recovery",
       "Least Privilege",
       "Security Awareness",
       "SOPs",
       "Escalation Management",
+    ],
+  },
+];
+
+export const technicalFluencyGroups: FluencyGroup[] = [
+  {
+    title: "Personal Projects",
+    label: "Personal Projects",
+    skills: ["Swift", "React", "TypeScript", "GitHub", "AWS", "Azure", "SDLC", "Agile", "Scrum"],
+  },
+  {
+    title: "Recruiting Context",
+    label: "Recruiting Context",
+    skills: [
+      "Breadboarding",
+      "Semiconductor Design",
+      "Silicon Design",
+      "CPU Architecture",
+      "GPU Architecture",
     ],
   },
 ];

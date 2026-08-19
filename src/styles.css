@@ -276,11 +276,16 @@
       color 140ms ease;
   }
 
+  .pill-static {
+    cursor: default;
+    display: inline-block;
+  }
+
   .pill:focus-visible {
     outline-offset: 3px;
   }
 
-  .pill:hover,
+  button.pill:hover,
   .pill[data-state="active"],
   .pill[data-state="locked"] {
     background: var(--cat-strong);
@@ -290,6 +295,35 @@
   .pill[data-hover-suppressed="true"],
   .pill[data-hover-suppressed="true"]:hover {
     background: var(--paper);
+    color: var(--ink);
+  }
+
+  .technologies-layout {
+    display: grid;
+    gap: 3.25rem;
+  }
+
+  .fluency-pill {
+    align-items: center;
+    background: color-mix(in srgb, var(--background) 76%, var(--paper));
+    border: 1px solid color-mix(in srgb, var(--muted-foreground) 32%, var(--border));
+    border-radius: 9999px;
+    color: color-mix(in srgb, var(--ink) 88%, var(--muted-foreground));
+    display: inline-flex;
+    font-size: 0.93rem;
+    font-weight: 620;
+    line-height: 1.35;
+    min-height: 2.05rem;
+    padding: 7px 0.75rem;
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease;
+  }
+
+  .fluency-pill:hover {
+    background: var(--background);
+    border-color: color-mix(in srgb, var(--link) 40%, var(--border));
     color: var(--ink);
   }
 
@@ -337,11 +371,7 @@
   }
 
   .career-path-item[data-current="true"] .career-path-date {
-    background: linear-gradient(
-      to top,
-      #ffea3d 42%,
-      transparent 42%
-    );
+    background: linear-gradient(to top, #ffea3d 42%, transparent 42%);
     color: var(--ink);
     padding: 0 0.08em;
     box-decoration-break: clone;
@@ -403,6 +433,45 @@
   .experience-entry[data-density="compact"] .serif-prose {
     font-size: 19px;
     line-height: 1.5;
+  }
+
+  .technical-career-accordion {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0.95rem 0;
+  }
+
+  .technical-career-accordion summary {
+    align-items: center;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.02rem;
+    font-weight: 750;
+    gap: 0.65rem;
+    line-height: 1.4;
+    list-style: none;
+    min-height: 2.7rem;
+    text-wrap: balance;
+  }
+
+  .technical-career-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .technical-career-accordion summary::before {
+    border-bottom: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    content: "";
+    flex: 0 0 auto;
+    height: 0.52rem;
+    transform: rotate(-45deg);
+    transition: transform 160ms ease;
+    width: 0.52rem;
+  }
+
+  .technical-career-accordion[open] summary::before {
+    transform: rotate(45deg);
   }
 
   .discovery-note {

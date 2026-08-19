@@ -213,7 +213,7 @@ function Hero() {
           alt="Aaron Keuper"
           width="136"
           height="136"
-          className="hero-photo h-[132px] w-[132px] rounded-full border-[3px] border-[#3b4252] object-cover"
+          className="hero-photo h-[132px] w-[132px] rounded-full border-[5px] border-[#d8dee9] object-cover"
         />
         <div className="max-w-[880px]">
           <h1 className="text-[2.9rem] font-extrabold leading-[1.02] text-foreground sm:text-[3.85rem]">

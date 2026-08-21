@@ -93,7 +93,7 @@ function taggedHit(item: SkillTaggedText, active: string | null) {
 }
 
 function escapeSelectorValue(value: string) {
-  return window.CSS?.escape ? CSS.escape(value) : value.replace(/["\\]/g, "\\$&");
+  return typeof CSS === "undefined" ? value.replace(/["\\]/g, "\\$&") : CSS.escape(value);
 }
 
 function Home() {
@@ -566,7 +566,7 @@ function EnterpriseExperience({
         recruiting.
       </p>
       <details className="technical-career-accordion mt-8 max-w-[900px]">
-        <summary>View full Systems Administrator / Engineering career</summary>
+        <summary>View full IT / Systems career</summary>
         <div className={`mt-10 ${EXPERIENCE_WIDTH} space-y-14`}>
           {jobs.map((job, index) => {
             const environmentHit =
@@ -622,7 +622,7 @@ function EnterpriseExperience({
 
 function Education() {
   return (
-    <section id="education" className={SECTION_GAP_LARGE}>
+    <section id="education" className="mt-12 scroll-mt-24 sm:mt-14">
       <h2 className={`${SECTION_H}`}>Education &amp; Professional Development</h2>
       <div className={`${PROSE_WIDTH} mt-9 space-y-7`}>
         {education.map((e, index) => (

@@ -110,6 +110,7 @@ export const skillGroups: SkillGroup[] = [
       "ChromeOS",
       "Windows Server",
       "Apple Business Manager",
+      "Hyper-V",
       "Enterprise Wi-Fi",
       "Juniper",
       "Aruba",
@@ -144,13 +145,7 @@ export const technicalFluencyGroups: FluencyGroup[] = [
   {
     title: "Recruiting Context",
     label: "Recruiting Context",
-    skills: [
-      "Breadboarding",
-      "Semiconductor Design",
-      "Silicon Design",
-      "CPU Architecture",
-      "GPU Architecture",
-    ],
+    skills: ["Breadboarding", "Semiconductor Design", "CPU Architecture", "GPU Architecture"],
   },
 ];
 
@@ -417,7 +412,7 @@ export const summary =
 export const education = [
   {
     school: "Calbright College",
-    detail: "Human Resources Talent Acquisition",
+    detail: "Certificate - Human Resources Talent Acquisition, 2025",
     note: "Recruiting and talent acquisition professional development.",
   },
   {

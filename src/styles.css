@@ -230,6 +230,13 @@
     color: var(--foreground);
   }
 
+  .current-focus {
+    background: var(--cream);
+    border: 1px solid color-mix(in srgb, var(--border) 78%, var(--cream));
+    border-radius: 8px;
+    padding: 1.15rem 1.25rem;
+  }
+
   .nav-link {
     color: var(--ink);
     text-decoration: none;
@@ -325,6 +332,26 @@
     background: var(--background);
     border-color: color-mix(in srgb, var(--link) 40%, var(--border));
     color: var(--ink);
+  }
+
+  .capability-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.6rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .capability-list li {
+    background: color-mix(in srgb, var(--background) 72%, var(--paper));
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    color: color-mix(in srgb, var(--ink) 90%, var(--muted-foreground));
+    font-size: 0.94rem;
+    font-weight: 650;
+    line-height: 1.35;
+    min-height: 2.05rem;
+    padding: 7px 0.75rem;
   }
 
   .skill-mark:hover,
@@ -472,6 +499,18 @@
 
   .technical-career-accordion[open] summary::before {
     transform: rotate(45deg);
+  }
+
+  .supporting-resume-link {
+    border-left: 2px solid var(--border);
+    padding-left: 1rem;
+  }
+
+  .supporting-resume-link p {
+    color: var(--muted-foreground);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    margin-bottom: 0.35rem;
   }
 
   .discovery-note {

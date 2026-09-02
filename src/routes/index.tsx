@@ -6,6 +6,7 @@ import {
   education,
   impact,
   jobs,
+  recruitingCapabilities,
   recruitingExperience,
   remoteSetup,
   rolesUnderstood,
@@ -164,7 +165,9 @@ function Home() {
       <main className="print-single mx-auto w-full max-w-[1200px] px-5 pb-28 sm:px-8">
         <Hero />
         <div className="content-axis">
+          <CurrentFocus />
           <About active={active} onMarkClick={scrollToSkillList} />
+          <RecruitingCapabilities />
           <RecruitingExperience />
           <TechnicalDomains
             active={active}
@@ -243,18 +246,15 @@ function Hero() {
           <p
             className={`mt-5 ${PROSE_WIDTH} text-[1.06rem] leading-[1.62] text-foreground sm:text-[1.16rem]`}
           >
-            Former agency technical sourcer returning to recruiting after more than a decade in
-            hands-on enterprise technology operations.
+            Former agency technical sourcer returning to recruiting after more than a decade in the
+            enterprise technology environments I once recruited for.
           </p>
           <p className="mt-3 text-[1rem] leading-[1.6] text-muted-foreground">
-            Santa Cruz, California · Remote U.S.
+            Santa Cruz, California · Remote U.S. · Open to full-time, contract &amp; part-time
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-[1rem]">
             <a className="prose-link resume-link-primary" href={RECRUITING_RESUME_PATH} download>
               Technical Recruiting Resume
-            </a>
-            <a className="prose-link" href={SYSADMIN_RESUME_PATH} download>
-              Senior Systems Administrator Resume
             </a>
             <a className="prose-link" href="mailto:keuper@duck.com">
               Email Aaron
@@ -262,6 +262,18 @@ function Hero() {
           </div>
         </div>
       </div>
+    </section>
+  );
+}
+
+function CurrentFocus() {
+  return (
+    <section className="current-focus print-block mt-12 max-w-[760px] sm:mt-16">
+      <p className="text-[0.78rem] font-extrabold uppercase text-muted-foreground">Current Focus</p>
+      <p className="mt-3 text-[1rem] leading-[1.62] text-foreground sm:text-[1.05rem]">
+        Returning to Talent Acquisition through technical sourcing, recruiting coordination, junior
+        technical recruiting, and talent operations opportunities.
+      </p>
     </section>
   );
 }
@@ -306,9 +318,26 @@ function CareerPath() {
   );
 }
 
+function RecruitingCapabilities() {
+  return (
+    <section id="recruiting" className={SECTION_GAP}>
+      <h2 className={`${SECTION_H}`}>Recruiting Capabilities</h2>
+      <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
+        Sourcing and recruiting language I bring back into Talent Acquisition, supported by earlier
+        agency experience and deeper technical domain context.
+      </p>
+      <ul className="capability-list mt-7 max-w-[900px]">
+        {recruitingCapabilities.map((capability) => (
+          <li key={capability}>{capability}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 function RecruitingExperience() {
   return (
-    <section id="recruiting" className={SECTION_GAP_LARGE}>
+    <section className={SECTION_GAP_LARGE}>
       <h2 className={`${SECTION_H}`}>Recruiting &amp; Sourcing Experience</h2>
       <div className={`mt-9 ${EXPERIENCE_WIDTH} space-y-10`}>
         {recruitingExperience.map((item) => (
@@ -377,10 +406,10 @@ function TechnicalDomains({
     <section id="technical-context" className={`print-block ${SECTION_GAP_LARGE}`}>
       <div className="flex flex-wrap items-baseline justify-between gap-5">
         <div>
-          <h2 className={`${SECTION_H}`}>Technologies</h2>
+          <h2 className={`${SECTION_H}`}>Technical Domain Expertise</h2>
           <p className={`mt-4 ${PROSE_WIDTH} text-[1rem] leading-[1.65] text-foreground`}>
-            Technical context I bring to sourcing and recruiting, from hands-on enterprise
-            operations, personal projects, and prior recruiting exposure.
+            Hands-on enterprise technology knowledge I bring to technical sourcing, recruiter
+            conversations, and technical role intake.
           </p>
           <p className={`discovery-note mt-3 ${PROSE_WIDTH}`}>
             Select a hands-on technology to see where it appears in my technical experience.
@@ -567,6 +596,12 @@ function EnterpriseExperience({
       </p>
       <details className="technical-career-accordion mt-8 max-w-[900px]">
         <summary>View full IT / Systems career</summary>
+        <div className="supporting-resume-link mt-7">
+          <p>Looking for the technical background behind my recruiting specialization?</p>
+          <a className="prose-link" href={SYSADMIN_RESUME_PATH} download>
+            View Senior Systems Administrator Resume
+          </a>
+        </div>
         <div className={`mt-10 ${EXPERIENCE_WIDTH} space-y-14`}>
           {jobs.map((job, index) => {
             const environmentHit =
@@ -663,9 +698,6 @@ function ResumeContact() {
         </a>
         <a className="prose-link resume-link-primary" href={RECRUITING_RESUME_PATH} download>
           Technical Recruiting Resume
-        </a>
-        <a className="prose-link" href={SYSADMIN_RESUME_PATH} download>
-          Senior Systems Administrator Resume
         </a>
       </div>
     </section>

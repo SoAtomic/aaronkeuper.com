@@ -35,10 +35,25 @@ export const careerPath = [
   { title: "Technical Sourcing", dates: "2013-2014", label: "Technical Sourcer" },
   { title: "Enterprise IT", dates: "2014-2025", label: "Systems / Infrastructure" },
   {
-    title: "Technical Recruiting",
-    dates: "Current Direction",
-    label: "Returning Sourcer / Recruiter",
+    title: "Technical Sourcer / Recruiter",
+    dates: "2026 ->",
+    label: "Now",
   },
+];
+
+export const recruitingCapabilities = [
+  "Technical Sourcing",
+  "Candidate Research",
+  "Boolean Search",
+  "Pipeline Development",
+  "Candidate Qualification",
+  "Recruiter Support",
+  "Technical Role Intake",
+  "Contingent Staffing",
+  "Candidate Experience",
+  "Recruiting Coordination",
+  "Talent Operations",
+  "Applicant Tracking / Recruiting Systems",
 ];
 
 export const recruitingExperience: ExperienceItem[] = [
@@ -192,6 +207,12 @@ export const rolesUnderstood = [
   "Help Desk / Service Desk",
   "Desktop Support",
   "Infrastructure Engineer",
+  "Systems Engineering",
+  "Software Developer",
+  "Software Architects",
+  "Big Data Architecture & Administration",
+  "Machine Learning",
+  "AI Engineering",
   "Network Administrator",
   "Identity & Access Administration",
   "IT Manager",
